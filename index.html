@@ -32,15 +32,17 @@
             padding: 15px;
             filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
             cursor: zoom-in;
-            transition: transform 0.3s;
-        }
-        .product-img:hover {
-            transform: scale(1.05);
         }
         .logo-img {
             width: 55px;
             height: 55px;
             cursor: pointer;
+        }
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active {
+            display: block;
         }
     </style>
 </head>
@@ -130,44 +132,70 @@
 
     <!-- ====================== PAINEL ADMIN ====================== -->
     <div id="admin-panel" class="hidden fixed inset-0 bg-black/95 z-[500] overflow-auto">
-        <div class="max-w-5xl mx-auto p-6">
-            <div class="flex justify-between items-center mb-6">
+        <div class="max-w-6xl mx-auto p-6">
+            <div class="flex justify-between items-center mb-8">
                 <h2 class="text-3xl font-bold text-[#d4af77]">Painel Administrativo</h2>
                 <button onclick="closeAdmin()" class="text-4xl text-red-500">✕</button>
             </div>
 
-            <!-- Cadastrar Novo Produto -->
-            <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
-                <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input id="new-name" placeholder="Nome do produto" class="bg-zinc-800 p-4 rounded-2xl">
-                    <input id="new-img" placeholder="URL da imagem" class="bg-zinc-800 p-4 rounded-2xl">
-                    <input id="new-price" type="number" placeholder="Preço" class="bg-zinc-800 p-4 rounded-2xl">
-                    <select id="new-category" class="bg-zinc-800 p-4 rounded-2xl">
-                        <option value="CIGARROS">CIGARROS</option>
-                        <option value="SEDAS">SEDAS E PITEIRAS</option>
-                        <option value="FUMOS">FUMOS</option>
-                        <option value="ACESSORIOS">ACESSÓRIOS</option>
-                    </select>
+            <!-- Menu de Ícones -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+                <div onclick="showAdminSection('products-section')" 
+                     class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center transition">
+                    <i class="fa-solid fa-box text-5xl text-[#d4af77] mb-4"></i>
+                    <p class="text-xl font-semibold">Produtos</p>
                 </div>
-                <button onclick="addNewProduct()" class="mt-4 w-full bg-green-600 hover:bg-green-500 py-4 rounded-3xl font-semibold">
-                    + CADASTRAR PRODUTO
-                </button>
+                <div onclick="showAdminSection('sales-section')" 
+                     class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center transition">
+                    <i class="fa-solid fa-chart-bar text-5xl text-[#d4af77] mb-4"></i>
+                    <p class="text-xl font-semibold">Relatórios de Vendas</p>
+                </div>
             </div>
 
-            <!-- Lista de Produtos -->
-            <div class="bg-zinc-900 rounded-3xl p-6">
-                <h3 class="text-xl font-semibold mb-4">Editar Produtos</h3>
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="border-b border-zinc-700">
-                            <th class="py-3">Produto</th>
-                            <th class="py-3">Preço</th>
-                            <th class="py-3 text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-products" class="text-sm"></tbody>
-                </table>
+            <!-- ====================== SEÇÃO PRODUTOS ====================== -->
+            <div id="products-section" class="admin-section active">
+                <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input id="new-name" placeholder="Nome do produto" class="bg-zinc-800 p-4 rounded-2xl">
+                        <input id="new-img" placeholder="URL da imagem" class="bg-zinc-800 p-4 rounded-2xl">
+                        <input id="new-price" type="number" placeholder="Preço" class="bg-zinc-800 p-4 rounded-2xl">
+                        <select id="new-category" class="bg-zinc-800 p-4 rounded-2xl">
+                            <option value="CIGARROS">CIGARROS</option>
+                            <option value="SEDAS">SEDAS E PITEIRAS</option>
+                            <option value="FUMOS">FUMOS</option>
+                            <option value="ACESSORIOS">ACESSÓRIOS</option>
+                        </select>
+                    </div>
+                    <button onclick="addNewProduct()" class="mt-4 w-full bg-green-600 hover:bg-green-500 py-4 rounded-3xl font-semibold">
+                        + CADASTRAR PRODUTO
+                    </button>
+                </div>
+
+                <div class="bg-zinc-900 rounded-3xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Gerenciar Produtos</h3>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-zinc-700">
+                                <th class="py-3">Produto</th>
+                                <th class="py-3">Preço</th>
+                                <th class="py-3 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products" class="text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ====================== SEÇÃO VENDAS ====================== -->
+            <div id="sales-section" class="admin-section">
+                <div class="bg-zinc-900 rounded-3xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Relatórios de Vendas / Pedidos</h3>
+                    <div id="sales-list" class="space-y-4">
+                        <!-- Pedidos aparecerão aqui -->
+                        <p class="text-zinc-400 text-center py-12">Nenhum pedido registrado ainda.</p>
+                    </div>
+                </div>
             </div>
 
             <button onclick="saveAdminChanges()" 
@@ -179,6 +207,7 @@
 
     <script>
         let products = [
+            // Todos os produtos (completo)
             { id: 1, name: "CAMEL AZUL (PC10)", category: "CIGARROS", price: 85, img: "https://i.ibb.co/PGPFZ8Mk/Whats-App-Image-2026-05-01-at-06-40-26-removebg-preview.png", active: true },
             { id: 10, name: "CAMEL BERRY CRAVO (PC10)", category: "CIGARROS", price: 85, img: "https://i.ibb.co/spc663GH/Whats-App-Image-2026-05-01-at-06-54-26-removebg-preview.png", active: true },
             { id: 2, name: "DUNHILL (PC10)", category: "CIGARROS", price: 138, img: "https://i.ibb.co/HDx9LsC7/Whats-App-Image-2026-04-28-at-07-45-51-2-removebg-preview.png", active: true },
@@ -225,7 +254,9 @@
 
         let cart = []
         let currentCategory = 'all'
+        let orders = [] // Para armazenar pedidos simulados
 
+        // Funções da Loja (todas ativas)
         function renderProducts(filtered) {
             const container = document.getElementById('products-container')
             container.innerHTML = ''
@@ -353,6 +384,14 @@
             })
             msg += `\n*TOTAL: R$ ${total},00*`
             window.open(`https://wa.me/5527995065360?text=${encodeURIComponent(msg)}`, '_blank')
+            
+            // Salva pedido para relatório
+            orders.push({
+                date: new Date().toLocaleString(),
+                items: [...cart],
+                total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+            })
+            
             cart = []
             updateCartCount()
             toggleCart()
@@ -363,7 +402,7 @@
             const senha = prompt("Digite a senha de administrador:")
             if (senha === "demolay146") {
                 document.getElementById('admin-panel').classList.remove('hidden')
-                renderAdminProducts()
+                showAdminSection('products-section')
             } else {
                 alert("Senha incorreta!")
             }
@@ -371,6 +410,12 @@
 
         function closeAdmin() {
             document.getElementById('admin-panel').classList.add('hidden')
+        }
+
+        function showAdminSection(section) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'))
+            document.getElementById(section).classList.add('active')
+            if (section === 'products-section') renderAdminProducts()
         }
 
         function renderAdminProducts() {
