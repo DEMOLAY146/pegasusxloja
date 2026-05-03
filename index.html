@@ -124,7 +124,7 @@
         </a>
     </footer>
 
-    <!-- ====================== PÁGINA ADMIN ====================== -->
+    <!-- ====================== PAINEL ADMIN ====================== -->
     <div id="admin-panel" class="hidden fixed inset-0 bg-black/95 z-[500] overflow-auto">
         <div class="max-w-5xl mx-auto p-6">
             <div class="flex justify-between items-center mb-6">
@@ -151,16 +151,15 @@
                 </button>
             </div>
 
-            <!-- Lista de Produtos -->
+            <!-- Lista de Produtos com edição de preço -->
             <div class="bg-zinc-900 rounded-3xl p-6">
-                <h3 class="text-xl font-semibold mb-4">Editar Produtos</h3>
+                <h3 class="text-xl font-semibold mb-4">Produtos Existentes</h3>
                 <table class="w-full text-left">
                     <thead>
                         <tr class="border-b border-zinc-700">
                             <th class="py-3">Produto</th>
                             <th class="py-3">Preço</th>
                             <th class="py-3 text-center">Status</th>
-                            <th class="py-3 text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="admin-products" class="text-sm"></tbody>
@@ -175,12 +174,16 @@
     </div>
 
     <script>
-        let products = [ /* ... todos os produtos da última versão ... */ ];
+        let products = [
+            // ... (todos os produtos da versão anterior)
+            { id: 1, name: "CAMEL AZUL (PC10)", category: "CIGARROS", price: 85, img: "https://i.ibb.co/PGPFZ8Mk/Whats-App-Image-2026-05-01-at-06-40-26-removebg-preview.png", active: true },
+            // ... (inclua todos os outros produtos aqui)
+        ]
 
         let cart = []
         let currentCategory = 'all'
 
-        // Funções da loja (renderProducts, zoom, carrinho, etc.) permanecem iguais
+        // Funções da loja (renderProducts, carrinho, zoom, etc.)
 
         function renderProducts(filtered) {
             const container = document.getElementById('products-container')
@@ -229,21 +232,16 @@
                 const tr = document.createElement('tr')
                 tr.className = "border-b border-zinc-700"
                 tr.innerHTML = `
-                    <td class="py-4">${p.name}</td>
+                    <td class="py-4 font-medium">${p.name}</td>
                     <td class="py-4">
                         <input type="number" value="${p.price}" 
                                onchange="updatePrice(${p.id}, this.value)" 
-                               class="bg-zinc-800 w-24 text-center rounded-xl p-2">
+                               class="bg-zinc-800 w-28 text-center rounded-xl p-2">
                     </td>
                     <td class="py-4 text-center">
                         <button onclick="toggleProduct(${p.id})" 
-                                class="px-5 py-2 rounded-3xl text-sm font-medium ${p.active ? 'bg-green-600' : 'bg-red-600'}">
-                            ${p.active ? 'ATIVO' : 'INATIVO'}
-                        </button>
-                    </td>
-                    <td class="py-4 text-center">
-                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-400">
-                            <i class="fa-solid fa-trash"></i>
+                                class="px-6 py-2 rounded-3xl text-sm font-medium ${p.active ? 'bg-green-600' : 'bg-red-600'}">
+                            ${p.active ? '✅ ATIVO' : '❌ INATIVO'}
                         </button>
                     </td>
                 `
@@ -262,25 +260,18 @@
             renderAdminProducts()
         }
 
-        function deleteProduct(id) {
-            if (confirm("Tem certeza que deseja excluir este produto?")) {
-                products = products.filter(p => p.id !== id)
-                renderAdminProducts()
-            }
-        }
-
         function addNewProduct() {
             const name = document.getElementById('new-name').value.trim()
             const img = document.getElementById('new-img').value.trim()
             const price = parseFloat(document.getElementById('new-price').value)
             const category = document.getElementById('new-category').value
 
-            if (!name || !img || !price) {
-                alert("Preencha todos os campos!")
+            if (!name || !img || isNaN(price)) {
+                alert("Preencha todos os campos corretamente!")
                 return
             }
 
-            const newId = Math.max(...products.map(p => p.id)) + 1
+            const newId = Math.max(0, ...products.map(p => p.id)) + 1
 
             products.push({
                 id: newId,
@@ -294,7 +285,7 @@
             alert("Produto cadastrado com sucesso!")
             renderAdminProducts()
 
-            // Limpa os campos
+            // Limpa campos
             document.getElementById('new-name').value = ''
             document.getElementById('new-img').value = ''
             document.getElementById('new-price').value = ''
@@ -307,13 +298,11 @@
             renderProducts(products)
         }
 
-        // ... (resto do script: carrinho, zoom, etc.)
+        // ... (resto das funções: carrinho, zoom, filter, etc.)
 
         window.onload = () => {
             const saved = localStorage.getItem('pegasus_products')
-            if (saved) {
-                products = JSON.parse(saved)
-            }
+            if (saved) products = JSON.parse(saved)
             renderProducts(products)
             updateCartCount()
         }
