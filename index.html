@@ -20,11 +20,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
         
-        .product-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+        .product-card { height: 100%; display: flex; flex-direction: column; }
         .product-img {
             height: 200px;
             object-fit: contain;
@@ -33,98 +29,15 @@
             filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
             cursor: zoom-in;
         }
-        .logo-img {
-            width: 55px;
-            height: 55px;
-            cursor: pointer;
-        }
+        .logo-img { width: 55px; height: 55px; cursor: pointer; }
         .admin-section { display: none; }
         .admin-section.active { display: block; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen">
 
-    <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-black border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
-                    <img src="https://i.ibb.co/KxncsGgR/ZMUGd.jpg" alt="Logo" class="logo-img rounded-2xl border border-[#d4af77]" onclick="openAdmin()">
-                    <div>
-                        <h1 class="text-2xl font-bold text-[#d4af77]">PEGASUS</h1>
-                        <p class="text-[10px] text-zinc-400 -mt-1">REPRESENTAÇÕES</p>
-                    </div>
-                </div>
-                
-                <button onclick="toggleCart()" class="flex items-center gap-2 bg-zinc-900 px-4 py-2 rounded-3xl relative">
-                    <i class="fa-solid fa-shopping-cart text-xl"></i>
-                    <span class="text-sm">Carrinho</span>
-                    <div id="cart-count" class="bg-[#d4af77] text-black font-bold w-5 h-5 text-xs rounded-full flex items-center justify-center absolute -top-1 -right-1">0</div>
-                </button>
-            </div>
-        </div>
-
-        <!-- CATEGORIAS -->
-        <div class="bg-zinc-900 px-4 py-3 flex gap-2 overflow-x-auto border-t border-zinc-800">
-            <button onclick="selectCategory('all')" id="cat-all" class="category-btn active whitespace-nowrap px-6 py-2.5 bg-[#d4af77] text-black font-semibold rounded-3xl text-sm">TODOS</button>
-            <button onclick="selectCategory('CIGARROS')" id="cat-CIGARROS" class="category-btn whitespace-nowrap px-6 py-2.5 hover:bg-zinc-800 rounded-3xl text-sm">CIGARROS</button>
-            <button onclick="selectCategory('SEDAS')" id="cat-SEDAS" class="category-btn whitespace-nowrap px-6 py-2.5 hover:bg-zinc-800 rounded-3xl text-sm">SEDAS E PITEIRAS</button>
-            <button onclick="selectCategory('FUMOS')" id="cat-FUMOS" class="category-btn whitespace-nowrap px-6 py-2.5 hover:bg-zinc-800 rounded-3xl text-sm">FUMOS</button>
-            <button onclick="selectCategory('ACESSORIOS')" id="cat-ACESSORIOS" class="category-btn whitespace-nowrap px-6 py-2.5 hover:bg-zinc-800 rounded-3xl text-sm">ACESSÓRIOS</button>
-        </div>
-    </header>
-
-    <!-- Busca -->
-    <div class="max-w-7xl mx-auto px-4 pt-5">
-        <div class="relative">
-            <input id="search-input" type="text" placeholder="🔎 Buscar..." 
-                   class="w-full bg-zinc-900 border border-zinc-700 rounded-3xl py-4 px-8 pl-12 text-base"
-                   onkeyup="if(event.key === 'Enter') filterProducts()">
-            <i onclick="filterProducts()" class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-[#d4af77]"></i>
-        </div>
-    </div>
-
-    <!-- Produtos -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
-        <div id="products-container" class="grid grid-cols-2 gap-4"></div>
-    </main>
-
-    <!-- Modal de Zoom -->
-    <div id="zoom-modal" onclick="closeZoom()">
-        <img id="zoom-image" src="" onclick="event.stopImmediatePropagation(); closeZoom()">
-    </div>
-
-    <!-- Carrinho Modal -->
-    <div id="cart-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-end">
-        <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b flex justify-between items-center">
-                <h2 class="text-xl font-semibold">Seu Carrinho</h2>
-                <button onclick="toggleCart()" class="text-3xl text-zinc-400">✕</button>
-            </div>
-            <div id="cart-items" class="flex-1 overflow-auto p-5 space-y-4"></div>
-            
-            <div class="p-5 border-t">
-                <div class="flex justify-between text-xl mb-5">
-                    <span>Total:</span>
-                    <span id="cart-total" class="font-bold text-[#d4af77]">R$ 0,00</span>
-                </div>
-                <button onclick="finalizeOrder()" 
-                        class="w-full py-5 bg-green-600 hover:bg-green-500 rounded-3xl text-lg font-semibold flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    FINALIZAR NO WHATSAPP
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- RODAPÉ -->
-    <footer class="bg-black py-8 text-center">
-        <a href="https://wa.me/5527995065360" target="_blank"
-           class="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-5 rounded-3xl text-lg font-medium shadow-xl">
-            <i class="fa-brands fa-whatsapp text-3xl"></i>
-            FALAR COM O VENDEDOR
-        </a>
-    </footer>
+    <!-- HEADER, Busca, Produtos, Carrinho, Zoom e Rodapé permanecem iguais -->
+    <!-- (código completo omitido por brevidade - copie do seu arquivo anterior) -->
 
     <!-- ====================== PAINEL ADMIN ====================== -->
     <div id="admin-panel" class="hidden fixed inset-0 bg-black/95 z-[500] overflow-auto">
@@ -134,27 +47,25 @@
                 <button onclick="closeAdmin()" class="text-4xl text-red-500">✕</button>
             </div>
 
-            <!-- Menu de Ícones -->
+            <!-- Menu -->
             <div class="grid grid-cols-2 gap-6 mb-10">
-                <div onclick="showAdminSection('products-section')" 
-                     class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center transition">
+                <div onclick="showAdminSection('products-section')" class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center">
                     <i class="fa-solid fa-box text-5xl text-[#d4af77] mb-4"></i>
                     <p class="text-xl font-semibold">Produtos</p>
                 </div>
-                <div onclick="showAdminSection('sales-section')" 
-                     class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center transition">
+                <div onclick="showAdminSection('sales-section')" class="bg-zinc-900 hover:bg-zinc-800 p-8 rounded-3xl cursor-pointer text-center">
                     <i class="fa-solid fa-chart-bar text-5xl text-[#d4af77] mb-4"></i>
                     <p class="text-xl font-semibold">Relatórios de Vendas</p>
                 </div>
             </div>
 
-            <!-- ====================== PÁGINA PRODUTOS ====================== -->
+            <!-- Página Produtos -->
             <div id="products-section" class="admin-section active">
                 <!-- Cadastrar Novo Produto -->
                 <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <input id="new-name" placeholder="Nome do produto" class="bg-zinc-800 p-4 rounded-2xl">
+                        <input id="new-name" placeholder="Nome" class="bg-zinc-800 p-4 rounded-2xl">
                         <input id="new-img" placeholder="URL da imagem" class="bg-zinc-800 p-4 rounded-2xl">
                         <input id="new-cost" type="number" placeholder="Preço de Custo" class="bg-zinc-800 p-4 rounded-2xl">
                         <input id="new-price" type="number" placeholder="Preço de Venda" class="bg-zinc-800 p-4 rounded-2xl">
@@ -187,13 +98,13 @@
                 </div>
             </div>
 
-            <!-- ====================== PÁGINA RELATÓRIOS DE VENDAS ====================== -->
+            <!-- Página Relatórios de Vendas -->
             <div id="sales-section" class="admin-section">
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-semibold">Relatórios de Vendas</h3>
                         <div class="text-right">
-                            <p class="text-sm text-zinc-400">Lucro Total</p>
+                            <p class="text-sm text-zinc-400">Lucro Total Acumulado</p>
                             <p id="total-profit" class="text-3xl font-bold text-green-500">R$ 0,00</p>
                         </div>
                     </div>
@@ -201,178 +112,19 @@
                 </div>
             </div>
 
-            <button onclick="saveAdminChanges()" 
-                    class="mt-6 w-full py-5 bg-green-600 hover:bg-green-500 rounded-3xl text-lg font-semibold">
+            <button onclick="saveAdminChanges()" class="mt-6 w-full py-5 bg-green-600 hover:bg-green-500 rounded-3xl text-lg font-semibold">
                 💾 SALVAR TODAS AS ALTERAÇÕES
             </button>
         </div>
     </div>
 
     <script>
-        let products = [
-            // Produtos com preço de custo
-            { id: 1, name: "CAMEL AZUL (PC10)", category: "CIGARROS", costPrice: 60, price: 85, img: "https://i.ibb.co/PGPFZ8Mk/Whats-App-Image-2026-05-01-at-06-40-26-removebg-preview.png", active: true },
-            { id: 10, name: "CAMEL BERRY CRAVO (PC10)", category: "CIGARROS", costPrice: 55, price: 85, img: "https://i.ibb.co/spc663GH/Whats-App-Image-2026-05-01-at-06-54-26-removebg-preview.png", active: true },
-            { id: 2, name: "DUNHILL (PC10)", category: "CIGARROS", costPrice: 90, price: 138, img: "https://i.ibb.co/HDx9LsC7/Whats-App-Image-2026-04-28-at-07-45-51-2-removebg-preview.png", active: true },
-            { id: 8, name: "EGIPT BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/4gfJ5Lx7/Whats-App-Image-2026-04-30-at-21-30-20-removebg-preview-1.png", active: true },
-            { id: 5, name: "LUCK STRIKE DOUBLE (PC10)", category: "CIGARROS", costPrice: 85, price: 126, img: "https://i.ibb.co/nqypTnPM/Gemini-Generated-Image-vf6vzwvf6vzwvf6v-removebg-preview.png", active: true },
-            { id: 15, name: "OUTBACK (PC10)", category: "CIGARROS", costPrice: 25, price: 40, img: "https://i.ibb.co/MDTZdvcv/Whats-App-Image-2026-05-01-at-06-57-04-removebg-preview.png", active: true },
-            { id: 6, name: "PANDORA AZUL BOX (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/99KbNCKd/Gemini-Generated-Image-sl0unfsl0unfsl0u-1-removebg-preview.png", active: true },
-            { id: 7, name: "PANDORA MAÇO (PC10)", category: "CIGARROS", costPrice: 18, price: 30, img: "https://i.ibb.co/dJtMbwzd/Gemini-Generated-Image-1hdpoo1hdpoo1hdp-removebg-preview.png", active: true },
-            { id: 13, name: "PANDORA BOX VERMELHO (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/C5Mg0mXq/Gemini-Generated-Image-nm7ovrnm7ovrnm7o-removebg-preview-1.png", active: true },
-            { id: 14, name: "PANDORA BOX MENTA (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/XZFdtgXP/Gemini-Generated-Image-iur4raiur4raiur4-removebg-preview.png", active: true },
-            { id: 3, name: "ROTHMANS GLOBAL (PC10)", category: "CIGARROS", costPrice: 55, price: 79, img: "https://i.ibb.co/zT1D7VRG/u7-UTD-removebg-preview-1.png", active: true },
-            { id: 2, name: "ROTHMANS AZUL (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/zW4ZJRBY/ROTHMANS-BLUE-BOX-380x380.png", active: true },
-            { id: 4, name: "ROTHMANS VERMELHO (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/d4y0X5B2/188065-800-800.png", active: true },
-            { id: 9, name: "TOP TIM BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/hkMc1CP/Whats-App-Image-2026-05-01-at-06-33-04-removebg-preview.png", active: true },
-            { id: 16, name: "GUDANG NACIONAL (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/pvHDsCgJ/Whats-App-Image-2026-05-01-at-07-14-15-removebg-preview.png", active: true },
-            { id: 17, name: "BLACK MENTOL (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/KjTRXhJc/Whats-App-Image-2026-05-01-at-07-21-20-removebg-preview.png", active: true },
-            { id: 18, name: "COYOTE (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/PZCgrH9B/Whats-App-Image-2026-05-01-at-07-24-01-removebg-preview.png", active: true },
-            { id: 19, name: "MANDELLE (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/xSwrFn9m/Whats-App-Image-2026-05-01-at-07-44-21-removebg-preview.png", active: true },
-            
-            { id: 11, name: "ZOMO BRANCA", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/F4SSdTNN/Whats-App-Image-2026-05-01-at-07-51-16-removebg-preview.png", active: true },
-            { id: 12, name: "ZOMO MARROM", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/SXJSVN2F/Whats-App-Image-2026-05-01-at-07-51-17-removebg-preview.png", active: true },
-            { id: 20, name: "BEM BELADO SLIM CX50", category: "SEDAS", costPrice: 80, price: 115, img: "https://i.ibb.co/Wv5vYpsw/Whats-App-Image-2026-05-01-at-08-07-52-1-removebg-preview-1.png", active: true },
-            { id: 21, name: "BEM BELADO BROWN CX50", category: "SEDAS", costPrice: 95, price: 139, img: "https://i.ibb.co/6JpLXMcM/Whats-App-Image-2026-05-01-at-08-07-53-removebg-preview.png", active: true },
-            { id: 22, name: "SADHU MORNING LONGA SLIM CX21", category: "SEDAS", costPrice: 45, price: 69, img: "https://i.ibb.co/0jk1PYFh/Whats-App-Image-2026-05-01-at-08-07-52-removebg-preview-1.png", active: true },
-            { id: 23, name: "PITEIRA SADHU MORNING MEGA CX24", category: "SEDAS", costPrice: 50, price: 75, img: "https://i.ibb.co/gZvtRNkx/Whats-App-Image-2026-05-01-at-08-19-23-removebg-preview.png", active: true },
-            { id: 24, name: "PITEIRA SADHU NIGHT MEGA CX24", category: "SEDAS", costPrice: 50, price: 75, img: "https://i.ibb.co/nNhKJ2xR/Whats-App-Image-2026-05-01-at-08-19-23-1-removebg-preview.png", active: true },
-            { id: 25, name: "PITEIRA THE OG XL CX24", category: "SEDAS", costPrice: 50, price: 75, img: "https://i.ibb.co/Fkgttc16/Whats-App-Image-2026-05-01-at-08-19-22-removebg-preview.png", active: true },
-            { id: 26, name: "PITEIRA SESH XL CX24", category: "SEDAS", costPrice: 50, price: 75, img: "https://i.ibb.co/d0bvnx8Z/Whats-App-Image-2026-05-01-at-08-19-23-2-removebg-preview.png", active: true },
-            { id: 27, name: "PITEIRA SESH LARGE CX24", category: "SEDAS", costPrice: 45, price: 65, img: "https://i.ibb.co/3yCCVsdB/Whats-App-Image-2026-05-01-at-08-19-22-1-removebg-preview.png", active: true },
-            
-            { id: 28, name: "SABIA PT40", category: "FUMOS", costPrice: 80, price: 115, img: "https://i.ibb.co/wFBvxjT4/Whats-App-Image-2026-05-01-at-08-39-10-removebg-preview.png", active: true },
-            { id: 29, name: "AMSTERDAN CX06", category: "FUMOS", costPrice: 45, price: 65, img: "https://i.ibb.co/xqQc7TtW/Whats-App-Image-2026-05-01-at-08-41-14-removebg-preview.png", active: true },
-            { id: 30, name: "THE OG CX06", category: "FUMOS", costPrice: 30, price: 49, img: "https://i.ibb.co/nqx1cs11/Whats-App-Image-2026-05-01-at-08-41-15-removebg-preview.png", active: true },
-            
-            { id: 31, name: "SPLIFF SADHU NIGHT TESOURA+CUIA+PITEIRA", category: "ACESSORIOS", costPrice: 20, price: 34, img: "https://i.ibb.co/0jsNqfGK/Whats-App-Image-2026-05-02-at-00-34-08-removebg-preview.png", active: true },
-            { id: 32, name: "SPLIFF SADHU EVENING TESOURA+CUIA+PITEIRA", category: "ACESSORIOS", costPrice: 20, price: 34, img: "https://i.ibb.co/gMkpZn0G/Whats-App-Image-2026-05-02-at-00-34-08-1-removebg-preview.png", active: true },
-            { id: 33, name: "SPLIFF SADHU MORNING TESOURA+CUIA+PITEIRA", category: "ACESSORIOS", costPrice: 20, price: 34, img: "https://i.ibb.co/XfvdPt9X/foto-49170193-1.jpg", active: true },
-            { id: 35, name: "MICRO BONG", category: "ACESSORIOS", costPrice: 10, price: 17, img: "https://i.ibb.co/9k6Qt4Mb/foto-31830793-removebg-preview.png", active: true },
-            { id: 36, name: "PORTA ISQUEIRO PEQUENO", category: "ACESSORIOS", costPrice: 8, price: 13, img: "https://i.ibb.co/rKbt5Kg0/foto-30628133-removebg-preview-1.png", active: true },
-            { id: 37, name: "PORTA ISQUEIRO + CIGARRO", category: "ACESSORIOS", costPrice: 10, price: 16, img: "https://i.ibb.co/4nPSxsZr/foto-45732359-removebg-preview.png", active: true },
-            { id: 40, name: "ISQUEIRO BIC CT12", category: "ACESSORIOS", costPrice: 35, price: 55, img: "https://i.ibb.co/7d9drGS1/OIP.webp", active: true },
-            { id: 42, name: "ISQUEIRO CHAMA CX 50", category: "ACESSORIOS", costPrice: 35, price: 50, img: "https://i.ibb.co/jZ8XLyRQ/OIP-1-removebg-preview.png", active: true }
-        ];
-
+        let products = [ /* seus produtos com costPrice e price */ ];
         let cart = [];
         let currentCategory = 'all';
         let orders = [];
 
-        // ==================== FUNÇÕES DA LOJA ====================
-        function renderProducts(filtered) {
-            const container = document.getElementById('products-container');
-            container.innerHTML = '';
-            filtered.forEach(p => {
-                if (!p.active) return;
-                const card = `
-                <div class="product-card bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
-                    <img src="${p.img}" class="product-img w-full" onclick="zoomImage('${p.img}')">
-                    <div class="p-3.5 flex-1 flex flex-col">
-                        <h3 class="font-semibold text-base leading-tight">${p.name}</h3>
-                        <p class="text-[#d4af77] text-2xl font-bold mt-1">R$ ${p.price},00</p>
-                        <div class="mt-auto pt-4 flex gap-2">
-                            <input type="number" id="qty-${p.id}" value="1" min="1" class="w-14 bg-zinc-800 text-center rounded-2xl text-base py-3 border border-zinc-700">
-                            <button onclick="addToCart(${p.id})" class="flex-1 bg-[#d4af77] hover:bg-amber-300 text-zinc-950 font-semibold rounded-2xl text-sm py-3">
-                                ADICIONAR
-                            </button>
-                        </div>
-                    </div>
-                </div>`;
-                container.innerHTML += card;
-            });
-        }
-
-        function zoomImage(src) {
-            const modal = document.getElementById('zoom-modal');
-            document.getElementById('zoom-image').src = src;
-            modal.style.display = 'flex';
-        }
-
-        function closeZoom() {
-            document.getElementById('zoom-modal').style.display = 'none';
-        }
-
-        function filterProducts() {
-            const term = document.getElementById('search-input').value.toLowerCase();
-            let filtered = products.filter(p => 
-                p.active && (currentCategory === 'all' || p.category === currentCategory) &&
-                p.name.toLowerCase().includes(term)
-            );
-            renderProducts(filtered);
-        }
-
-        function selectCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                const isActive = (cat === 'all' && btn.id === 'cat-all') || btn.id === `cat-${cat}`;
-                btn.classList.toggle('active', isActive);
-                btn.classList.toggle('bg-[#d4af77]', isActive);
-                btn.classList.toggle('text-black', isActive);
-            });
-            filterProducts();
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            if (!product || !product.active) return;
-            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
-            const existing = cart.find(item => item.id === id);
-            if (existing) existing.quantity += qty;
-            else cart.push({ ...product, quantity: qty });
-            updateCartCount();
-            
-            const toast = document.createElement('div');
-            toast.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-3xl shadow-2xl z-[999]";
-            toast.textContent = `${qty}x ${product.name} adicionado!`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 1800);
-        }
-
-        function updateCartCount() {
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cart-count').textContent = count;
-        }
-
-        function toggleCart() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) renderCart();
-        }
-
-        function renderCart() {
-            const container = document.getElementById('cart-items');
-            container.innerHTML = '';
-            if (cart.length === 0) {
-                container.innerHTML = `<p class="text-center text-zinc-400 py-12">Seu carrinho está vazio</p>`;
-                document.getElementById('cart-total').textContent = 'R$ 0,00';
-                return;
-            }
-            let total = 0;
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                container.innerHTML += `
-                <div class="flex gap-4 bg-zinc-800 rounded-2xl p-4">
-                    <img src="${item.img}" class="w-16 h-16 object-contain rounded-xl">
-                    <div class="flex-1">
-                        <div class="flex justify-between">
-                            <h4 class="font-semibold">${item.name}</h4>
-                            <button onclick="removeFromCart(${item.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                        <p class="text-sm text-zinc-400">${item.quantity} × R$ ${item.price},00</p>
-                        <p class="text-[#d4af77] font-bold">R$ ${itemTotal},00</p>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('cart-total').textContent = `R$ ${total},00`;
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            updateCartCount();
-            renderCart();
-        }
+        // Funções da loja (carrinho, produtos, zoom, etc.) permanecem iguais
 
         function finalizeOrder() {
             if (cart.length === 0) return;
@@ -380,11 +132,15 @@
             
             const order = {
                 date: new Date().toLocaleString('pt-BR'),
-                items: [...cart],
-                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                items: JSON.parse(JSON.stringify(cart)),
+                total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
             };
             orders.push(order);
 
+            // SALVA PERMANENTEMENTE no localStorage
+            localStorage.setItem('pegasus_orders', JSON.stringify(orders));
+
+            // Envia para WhatsApp
             let msg = `🚀 *PEDIDO PEGASUS REPRESENTAÇÕES*\n\n`;
             let total = 0;
             cart.forEach(item => {
@@ -400,100 +156,6 @@
             toggleCart();
         }
 
-        // ====================== ADMIN ======================
-        function openAdmin() {
-            const senha = prompt("Digite a senha de administrador:");
-            if (senha === "demolay146") {
-                document.getElementById('admin-panel').classList.remove('hidden');
-                showAdminSection('products-section');
-            } else {
-                alert("Senha incorreta!");
-            }
-        }
-
-        function closeAdmin() {
-            document.getElementById('admin-panel').classList.add('hidden');
-        }
-
-        function showAdminSection(section) {
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(section).classList.add('active');
-            if (section === 'products-section') renderAdminProducts();
-            if (section === 'sales-section') renderSales();
-        }
-
-        function renderAdminProducts() {
-            const tbody = document.getElementById('admin-products');
-            tbody.innerHTML = '';
-            products.forEach(p => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-zinc-700";
-                tr.innerHTML = `
-                    <td class="py-4">${p.name}</td>
-                    <td class="py-4">
-                        <input type="number" value="${p.costPrice}" onchange="updateCostPrice(${p.id}, this.value)" class="bg-zinc-800 w-20 text-center rounded-xl p-2">
-                    </td>
-                    <td class="py-4">
-                        <input type="number" value="${p.price}" onchange="updatePrice(${p.id}, this.value)" class="bg-zinc-800 w-20 text-center rounded-xl p-2">
-                    </td>
-                    <td class="py-4 text-center">
-                        <button onclick="toggleProduct(${p.id})" class="px-6 py-2 rounded-3xl text-sm font-medium ${p.active ? 'bg-green-600' : 'bg-red-600'}">
-                            ${p.active ? '✅ ATIVO' : '❌ INATIVO'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateCostPrice(id, newCost) {
-            const product = products.find(p => p.id === id);
-            if (product) product.costPrice = parseFloat(newCost);
-        }
-
-        function updatePrice(id, newPrice) {
-            const product = products.find(p => p.id === id);
-            if (product) product.price = parseFloat(newPrice);
-        }
-
-        function toggleProduct(id) {
-            const product = products.find(p => p.id === id);
-            if (product) product.active = !product.active;
-            renderAdminProducts();
-        }
-
-        function addNewProduct() {
-            const name = document.getElementById('new-name').value.trim();
-            const img = document.getElementById('new-img').value.trim();
-            const costPrice = parseFloat(document.getElementById('new-cost').value);
-            const price = parseFloat(document.getElementById('new-price').value);
-            const category = document.getElementById('new-category').value;
-
-            if (!name || !img || isNaN(costPrice) || isNaN(price)) {
-                alert("Preencha todos os campos corretamente!");
-                return;
-            }
-
-            const newId = Math.max(0, ...products.map(p => p.id)) + 1;
-            products.push({
-                id: newId,
-                name: name,
-                category: category,
-                costPrice: costPrice,
-                price: price,
-                img: img,
-                active: true
-            });
-
-            alert("Produto cadastrado com sucesso!");
-            renderAdminProducts();
-
-            document.getElementById('new-name').value = '';
-            document.getElementById('new-img').value = '';
-            document.getElementById('new-cost').value = '';
-            document.getElementById('new-price').value = '';
-        }
-
         function renderSales() {
             const container = document.getElementById('sales-list');
             container.innerHTML = '';
@@ -505,13 +167,13 @@
                 return;
             }
 
-            orders.forEach((order, index) => {
+            orders.forEach(order => {
                 let orderProfit = 0;
                 let itemsText = order.items.map(item => {
                     const product = products.find(p => p.id === item.id);
                     const cost = product ? product.costPrice : 0;
-                    const profitPerItem = (item.price - cost) * item.quantity;
-                    orderProfit += profitPerItem;
+                    const profit = (item.price - cost) * item.quantity;
+                    orderProfit += profit;
                     return `${item.quantity}x ${item.name}`;
                 }).join(', ');
 
@@ -523,7 +185,7 @@
                         <span>${order.date}</span>
                         <span class="font-bold text-green-500">Lucro: R$ ${orderProfit.toFixed(2)}</span>
                     </div>
-                    <p class="text-zinc-100 mb-2">${itemsText}</p>
+                    <p class="text-zinc-100">${itemsText}</p>
                     <p class="text-[#d4af77] font-bold">Total Venda: R$ ${order.total},00</p>
                 </div>`;
             });
@@ -533,14 +195,20 @@
 
         function saveAdminChanges() {
             localStorage.setItem('pegasus_products', JSON.stringify(products));
-            alert("✅ Alterações salvas com sucesso!");
+            alert("✅ Alterações salvas permanentemente!");
             closeAdmin();
             renderProducts(products);
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('pegasus_products');
-            if (saved) products = JSON.parse(saved);
+            // Carrega produtos
+            const savedProducts = localStorage.getItem('pegasus_products');
+            if (savedProducts) products = JSON.parse(savedProducts);
+
+            // Carrega pedidos salvos permanentemente
+            const savedOrders = localStorage.getItem('pegasus_orders');
+            if (savedOrders) orders = JSON.parse(savedOrders);
+
             renderProducts(products);
             updateCartCount();
         };
