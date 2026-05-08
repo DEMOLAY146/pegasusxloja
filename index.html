@@ -91,7 +91,7 @@
         </a>
     </footer>
 
-    <!-- ====================== PAINEL ADMIN ====================== -->
+    <!-- PAINEL ADMIN -->
     <div id="admin-panel" class="hidden fixed inset-0 bg-black/95 z-[500] overflow-auto">
         <div class="max-w-6xl mx-auto p-6">
             <div class="flex justify-between items-center mb-8">
@@ -127,15 +127,7 @@
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Gerenciar Produtos</h3>
                     <table class="w-full text-left">
-                        <thead>
-                            <tr class="border-b border-zinc-700">
-                                <th class="py-3">Produto</th>
-                                <th class="py-3">Custo</th>
-                                <th class="py-3">Venda</th>
-                                <th class="py-3 text-center">Status</th>
-                                <th class="py-3 text-center">Ações</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b border-zinc-700"><th class="py-3">Produto</th><th class="py-3">Custo</th><th class="py-3">Venda</th><th class="py-3 text-center">Status</th><th class="py-3 text-center">Ações</th></tr></thead>
                         <tbody id="admin-products" class="text-sm"></tbody>
                     </table>
                 </div>
@@ -175,11 +167,38 @@
     </div>
 
     <script>
-        let products = [ /* mesmo array completo com IDs únicos */ 
+        let products = [
             { id: 101, name: "CAMEL AZUL (PC10)", category: "CIGARROS", costPrice: 60, price: 85, img: "https://i.ibb.co/PGPFZ8Mk/Whats-App-Image-2026-05-01-at-06-40-26-removebg-preview.png", active: true },
+            { id: 102, name: "CAMEL BERRY CRAVO (PC10)", category: "CIGARROS", costPrice: 55, price: 85, img: "https://i.ibb.co/spc663GH/Whats-App-Image-2026-05-01-at-06-54-26-removebg-preview.png", active: true },
+            { id: 103, name: "DUNHILL (PC10)", category: "CIGARROS", costPrice: 90, price: 138, img: "https://i.ibb.co/HDx9LsC7/Whats-App-Image-2026-04-28-at-07-45-51-2-removebg-preview.png", active: true },
+            { id: 104, name: "EGIPT BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/4gfJ5Lx7/Whats-App-Image-2026-04-30-at-21-30-20-removebg-preview-1.png", active: true },
+            { id: 105, name: "LUCK STRIKE DOUBLE (PC10)", category: "CIGARROS", costPrice: 85, price: 126, img: "https://i.ibb.co/nqypTnPM/Gemini-Generated-Image-vf6vzwvf6vzwvf6v-removebg-preview.png", active: true },
             { id: 106, name: "ROTHMANS AZUL (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/zW4ZJRBY/ROTHMANS-BLUE-BOX-380x380.png", active: true },
-            // ... (todos os outros 33 produtos com IDs únicos - mantidos exatamente como na versão anterior)
-            // (para brevidade não repeti todos aqui, mas no código final eles estão)
+            { id: 107, name: "ROTHMANS VERMELHO (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/d4y0X5B2/188065-800-800.png", active: true },
+            { id: 108, name: "ROTHMANS GLOBAL (PC10)", category: "CIGARROS", costPrice: 55, price: 79, img: "https://i.ibb.co/zT1D7VRG/u7-UTD-removebg-preview-1.png", active: true },
+            { id: 109, name: "TOP TIM BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/hkMc1CP/Whats-App-Image-2026-05-01-at-06-33-04-removebg-preview.png", active: true },
+            { id: 110, name: "OUTBACK (PC10)", category: "CIGARROS", costPrice: 25, price: 40, img: "https://i.ibb.co/MDTZdvcv/Whats-App-Image-2026-05-01-at-06-57-04-removebg-preview.png", active: true },
+            { id: 111, name: "PANDORA AZUL BOX (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/99KbNCKd/Gemini-Generated-Image-sl0unfsl0unfsl0u-1-removebg-preview.png", active: true },
+            { id: 112, name: "PANDORA MAÇO (PC10)", category: "CIGARROS", costPrice: 18, price: 30, img: "https://i.ibb.co/dJtMbwzd/Gemini-Generated-Image-1hdpoo1hdpoo1hdp-removebg-preview.png", active: true },
+            { id: 113, name: "PANDORA BOX VERMELHO (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/C5Mg0mXq/Gemini-Generated-Image-nm7ovrnm7ovrnm7o-removebg-preview-1.png", active: true },
+            { id: 114, name: "PANDORA BOX MENTA (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/XZFdtgXP/Gemini-Generated-Image-iur4raiur4raiur4-removebg-preview.png", active: true },
+            { id: 115, name: "GUDANG NACIONAL (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/pvHDsCgJ/Whats-App-Image-2026-05-01-at-07-14-15-removebg-preview.png", active: true },
+            { id: 116, name: "BLACK MENTOL (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/KjTRXhJc/Whats-App-Image-2026-05-01-at-07-21-20-removebg-preview.png", active: true },
+            { id: 117, name: "COYOTE (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/PZCgrH9B/Whats-App-Image-2026-05-01-at-07-24-01-removebg-preview.png", active: true },
+            { id: 118, name: "MANDELLE (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/xSwrFn9m/Whats-App-Image-2026-05-01-at-07-44-21-removebg-preview.png", active: true },
+            { id: 201, name: "ZOMO BRANCA", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/F4SSdTNN/Whats-App-Image-2026-05-01-at-07-51-16-removebg-preview.png", active: true },
+            { id: 202, name: "ZOMO MARROM", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/SXJSVN2F/Whats-App-Image-2026-05-01-at-07-51-17-removebg-preview.png", active: true },
+            { id: 203, name: "BEM BELADO SLIM CX50", category: "SEDAS", costPrice: 80, price: 115, img: "https://i.ibb.co/Wv5vYpsw/Whats-App-Image-2026-05-01-at-08-07-52-1-removebg-preview-1.png", active: true },
+            { id: 204, name: "BEM BELADO BROWN CX50", category: "SEDAS", costPrice: 95, price: 139, img: "https://i.ibb.co/6JpLXMcM/Whats-App-Image-2026-05-01-at-08-07-53-removebg-preview.png", active: true },
+            { id: 205, name: "SADHU MORNING LONGA SLIM CX21", category: "SEDAS", costPrice: 45, price: 69, img: "https://i.ibb.co/0jk1PYFh/Whats-App-Image-2026-05-01-at-08-07-52-removebg-preview-1.png", active: true },
+            { id: 301, name: "SABIA PT40", category: "FUMOS", costPrice: 80, price: 115, img: "https://i.ibb.co/wFBvxjT4/Whats-App-Image-2026-05-01-at-08-39-10-removebg-preview.png", active: true },
+            { id: 302, name: "AMSTERDAN CX06", category: "FUMOS", costPrice: 45, price: 65, img: "https://i.ibb.co/xqQc7TtW/Whats-App-Image-2026-05-01-at-08-41-14-removebg-preview.png", active: true },
+            { id: 303, name: "THE OG CX06", category: "FUMOS", costPrice: 30, price: 49, img: "https://i.ibb.co/nqx1cs11/Whats-App-Image-2026-05-01-at-08-41-15-removebg-preview.png", active: true },
+            { id: 401, name: "SPLIFF SADHU NIGHT TESOURA+CUIA+PITEIRA", category: "ACESSORIOS", costPrice: 20, price: 34, img: "https://i.ibb.co/0jsNqfGK/Whats-App-Image-2026-05-02-at-00-34-08-removebg-preview.png", active: true },
+            { id: 402, name: "MICRO BONG", category: "ACESSORIOS", costPrice: 10, price: 17, img: "https://i.ibb.co/9k6Qt4Mb/foto-31830793-removebg-preview.png", active: true },
+            { id: 403, name: "PORTA ISQUEIRO PEQUENO", category: "ACESSORIOS", costPrice: 8, price: 13, img: "https://i.ibb.co/rKbt5Kg0/foto-30628133-removebg-preview-1.png", active: true },
+            { id: 404, name: "ISQUEIRO BIC CT12", category: "ACESSORIOS", costPrice: 35, price: 55, img: "https://i.ibb.co/7d9drGS1/OIP.webp", active: true },
+            { id: 405, name: "ISQUEIRO CHAMA CX 50", category: "ACESSORIOS", costPrice: 35, price: 50, img: "https://i.ibb.co/jZ8XLyRQ/OIP-1-removebg-preview.png", active: true }
         ];
 
         let cart = [];
@@ -213,9 +232,8 @@
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            if (!product || !product.active) return alert("Erro: Produto não encontrado!");
-            const qtyInput = document.getElementById(`qty-${id}`);
-            const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+            if (!product || !product.active) return alert("Produto não encontrado!");
+            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
             const existing = cart.find(item => item.id === id);
             if (existing) existing.quantity += qty;
             else cart.push({ ...product, quantity: qty });
@@ -232,9 +250,45 @@
             document.getElementById('cart-count').textContent = count;
         }
 
-        function toggleCart() { /* mesmo código anterior */ }
-        function renderCart() { /* mesmo código anterior */ }
-        function removeFromCart(id) { /* mesmo código anterior */ }
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-zinc-400 py-12">Seu carrinho está vazio</p>`;
+                document.getElementById('cart-total').textContent = 'R$ 0,00';
+                return;
+            }
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                container.innerHTML += `
+                <div class="flex gap-4 bg-zinc-800 rounded-2xl p-4">
+                    <img src="${item.img}" class="w-16 h-16 object-contain rounded-xl">
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                        <p class="text-sm text-zinc-400">${item.quantity} × R$ ${item.price},00</p>
+                        <p class="text-[#d4af77] font-bold">R$ ${itemTotal},00</p>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('cart-total').textContent = `R$ ${total},00`;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartCount();
+            renderCart();
+        }
 
         function finalizeOrder() {
             if (cart.length === 0) return;
@@ -250,9 +304,8 @@
                 total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
             };
             orders.push(order);
-            saveData();                     // ← SALVA PERMANENTEMENTE
+            saveData();
 
-            // WhatsApp
             let msg = `🚀 *PEDIDO PEGASUS REPRESENTAÇÕES*\n\nCliente: ${customerName}\n\n`;
             let total = 0;
             cart.forEach(item => {
@@ -268,21 +321,99 @@
             toggleCart();
         }
 
-        function zoomImage(src) { /* mesmo */ }
-        function closeZoom() { /* mesmo */ }
-        function filterProducts() { /* mesmo */ }
-        function selectCategory(cat) { /* mesmo */ }
+        function zoomImage(src) {
+            document.getElementById('zoom-image').src = src;
+            document.getElementById('zoom-modal').classList.remove('hidden');
+        }
 
-        function openAdmin() { /* mesmo com senha demolay146 */ }
-        function closeAdmin() { /* mesmo */ }
-        function showAdminSection(section) { /* mesmo */ }
+        function closeZoom() {
+            document.getElementById('zoom-modal').classList.add('hidden');
+        }
 
-        function renderAdminProducts() { /* mesmo */ }
+        function filterProducts() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            let filtered = products.filter(p => p.active && (currentCategory === 'all' || p.category === currentCategory) && p.name.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        function selectCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                const isActive = (cat === 'all' && btn.id === 'cat-all') || btn.id === `cat-${cat}`;
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('bg-[#d4af77]', isActive);
+                btn.classList.toggle('text-black', isActive);
+            });
+            filterProducts();
+        }
+
+        function openAdmin() {
+            const senha = prompt("Digite a senha de administrador:");
+            if (senha === "demolay146") {
+                document.getElementById('admin-panel').classList.remove('hidden');
+                showAdminSection('products-section');
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-panel').classList.add('hidden');
+        }
+
+        function showAdminSection(section) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            if (section === 'products-section') renderAdminProducts();
+            if (section === 'sales-section') renderSales();
+        }
+
+        function renderAdminProducts() {
+            const tbody = document.getElementById('admin-products');
+            tbody.innerHTML = '';
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-zinc-700";
+                tr.innerHTML = `
+                    <td class="py-4">${p.name}</td>
+                    <td class="py-4"><input type="number" value="${p.costPrice}" onchange="updateCostPrice(${p.id}, this.value)" class="bg-zinc-800 w-20 text-center rounded-xl p-2"></td>
+                    <td class="py-4"><input type="number" value="${p.price}" onchange="updatePrice(${p.id}, this.value)" class="bg-zinc-800 w-20 text-center rounded-xl p-2"></td>
+                    <td class="py-4 text-center">
+                        <button onclick="toggleProduct(${p.id})" class="px-6 py-2 rounded-3xl text-sm font-medium ${p.active ? 'bg-green-600' : 'bg-red-600'}">${p.active ? '✅ ATIVO' : '❌ INATIVO'}</button>
+                    </td>
+                    <td class="py-4 text-center">
+                        <button onclick="deleteProduct(${p.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function updateCostPrice(id, newCost) { const p = products.find(x => x.id === id); if (p) p.costPrice = parseFloat(newCost); saveData(); }
         function updatePrice(id, newPrice) { const p = products.find(x => x.id === id); if (p) p.price = parseFloat(newPrice); saveData(); }
         function toggleProduct(id) { const p = products.find(x => x.id === id); if (p) p.active = !p.active; saveData(); renderAdminProducts(); }
         function deleteProduct(id) { if (confirm("Excluir permanentemente?")) { products = products.filter(p => p.id !== id); saveData(); renderAdminProducts(); } }
-        function addNewProduct() { /* mesmo código + saveData() no final */ }
+
+        function addNewProduct() {
+            const name = document.getElementById('new-name').value.trim();
+            const img = document.getElementById('new-img').value.trim();
+            const costPrice = parseFloat(document.getElementById('new-cost').value);
+            const price = parseFloat(document.getElementById('new-price').value);
+            const category = document.getElementById('new-category').value;
+
+            if (!name || !img || isNaN(costPrice) || isNaN(price)) return alert("Preencha todos os campos!");
+
+            const newId = Math.max(0, ...products.map(p => p.id)) + 1;
+            products.push({ id: newId, name, category, costPrice, price, img, active: true });
+            saveData();
+            alert("Produto cadastrado com sucesso!");
+            renderAdminProducts();
+
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-img').value = '';
+            document.getElementById('new-cost').value = '';
+            document.getElementById('new-price').value = '';
+        }
 
         function renderSales() {
             const filter = document.getElementById('period-filter').value;
@@ -297,7 +428,6 @@
             else if (filter === 'month') filteredOrders = orders.filter(o => new Date(o.date).getMonth() === now.getMonth() && new Date(o.date).getFullYear() === now.getFullYear());
             else if (filter === 'year') filteredOrders = orders.filter(o => new Date(o.date).getFullYear() === now.getFullYear());
 
-            // Agregação por produto
             const summary = {};
             filteredOrders.forEach(order => {
                 order.items.forEach(item => {
