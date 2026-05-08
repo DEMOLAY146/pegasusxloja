@@ -12,14 +12,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
         .product-card { height: 100%; display: flex; flex-direction: column; }
-        .product-img {
-            height: 200px;
-            object-fit: contain;
-            background: transparent;
-            padding: 15px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-            cursor: zoom-in;
-        }
+        .product-img { height: 200px; object-fit: contain; background: transparent; padding: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); cursor: zoom-in; }
         .logo-img { width: 55px; height: 55px; cursor: pointer; }
         .admin-section { display: none; }
         .admin-section.active { display: block; }
@@ -68,12 +61,12 @@
         <div id="products-container" class="grid grid-cols-2 gap-4"></div>
     </main>
 
-    <!-- Zoom -->
+    <!-- Zoom Modal -->
     <div id="zoom-modal" onclick="closeZoom()" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
         <img id="zoom-image" src="" onclick="event.stopImmediatePropagation(); closeZoom()" class="max-w-[90%] max-h-[90%] object-contain cursor-zoom-out">
     </div>
 
-    <!-- Carrinho -->
+    <!-- Carrinho Modal -->
     <div id="cart-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-end">
         <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[90vh] flex flex-col">
             <div class="p-5 border-b flex justify-between items-center">
@@ -119,19 +112,8 @@
                 </div>
             </div>
 
-            <!-- Produtos Section -->
+            <!-- Produtos -->
             <div id="products-section" class="admin-section active">
-                <!-- Cadastrar Nova Categoria -->
-                <div class="bg-zinc-900 rounded-3xl p-6 mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Gerenciar Categorias</h3>
-                    <div class="flex gap-3">
-                        <input id="new-category-name" placeholder="Nome da nova categoria" class="flex-1 bg-zinc-800 p-4 rounded-2xl">
-                        <button onclick="addNewCategory()" class="bg-green-600 px-8 rounded-2xl font-semibold">Cadastrar</button>
-                    </div>
-                    <div id="categories-list" class="flex flex-wrap gap-2 mt-4"></div>
-                </div>
-
-                <!-- Cadastrar Novo Produto -->
                 <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -144,7 +126,6 @@
                     <button onclick="addNewProduct()" class="mt-4 w-full bg-green-600 hover:bg-green-500 py-4 rounded-3xl font-semibold">+ CADASTRAR PRODUTO</button>
                 </div>
 
-                <!-- Gerenciar Produtos -->
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Gerenciar Produtos</h3>
                     <table class="w-full text-left">
@@ -166,30 +147,7 @@
             <div id="sales-section" class="admin-section">
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Relatórios de Vendas</h3>
-                    <div class="flex gap-4 mb-6">
-                        <select id="period-filter" class="bg-zinc-800 p-3 rounded-2xl">
-                            <option value="all">Todos os pedidos</option>
-                            <option value="day">Hoje</option>
-                            <option value="month">Este Mês</option>
-                            <option value="year">Este Ano</option>
-                        </select>
-                        <button onclick="renderSales()" class="bg-green-600 px-6 py-3 rounded-2xl">Gerar Relatório</button>
-                        <button onclick="exportToPDF()" class="bg-blue-600 px-6 py-3 rounded-2xl flex items-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> Exportar PDF
-                        </button>
-                    </div>
-                    <table class="w-full text-left bg-zinc-800 rounded-2xl">
-                        <thead>
-                            <tr class="bg-zinc-700">
-                                <th class="p-4">Produto</th>
-                                <th class="p-4 text-center">Qtd Vendida</th>
-                                <th class="p-4 text-center">Custo Total</th>
-                                <th class="p-4 text-center">Lucro</th>
-                            </tr>
-                        </thead>
-                        <tbody id="report-table" class="text-sm"></tbody>
-                    </table>
-                    <div id="report-summary" class="mt-6 bg-zinc-800 p-6 rounded-3xl"></div>
+                    <div id="sales-list" class="space-y-6"></div>
                 </div>
             </div>
         </div>
@@ -233,8 +191,8 @@
         let cart = [];
         let currentCategory = 'all';
         let orders = [];
-        let categories = ["CIGARROS", "SEDAS", "FUMOS", "ACESSORIOS"];
 
+        // ==================== FUNÇÕES DA LOJA ====================
         function renderProducts(filtered) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
@@ -258,7 +216,7 @@
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            if (!product || !product.active) return;
+            if (!product || !product.active) return alert("Produto não encontrado ou desativado!");
             const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
             const existing = cart.find(item => item.id === id);
             if (existing) existing.quantity += qty;
@@ -392,10 +350,7 @@
         function showAdminSection(section) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.getElementById(section).classList.add('active');
-            if (section === 'products-section') {
-                renderAdminProducts();
-                renderCategoriesList();
-            }
+            if (section === 'products-section') renderAdminProducts();
             if (section === 'sales-section') renderSales();
         }
 
@@ -439,8 +394,9 @@
         }
 
         function deleteProduct(id) {
-            if (confirm("Excluir este produto?")) {
+            if (confirm("Excluir este produto permanentemente?")) {
                 products = products.filter(p => p.id !== id);
+                localStorage.setItem('pegasus_products', JSON.stringify(products));
                 renderAdminProducts();
             }
         }
@@ -469,60 +425,79 @@
             document.getElementById('new-price').value = '';
         }
 
-        function renderCategoriesList() {
-            const container = document.getElementById('categories-list');
-            container.innerHTML = '';
-            categories.forEach((cat, i) => {
-                const div = document.createElement('div');
-                div.className = "bg-zinc-800 px-4 py-2 rounded-2xl flex items-center gap-3";
-                div.innerHTML = `<span>${cat}</span><button onclick="deleteCategory(${i})" class="text-red-500 text-sm">Excluir</button>`;
-                container.appendChild(div);
-            });
-        }
-
-        function addNewCategory() {
-            const name = document.getElementById('new-category-name').value.trim().toUpperCase();
-            if (!name) return alert("Digite o nome da categoria!");
-            if (categories.includes(name)) return alert("Categoria já existe!");
-
-            categories.push(name);
-            localStorage.setItem('pegasus_categories', JSON.stringify(categories));
-            renderCategoriesList();
-            updateCategoryDropdown();
-            document.getElementById('new-category-name').value = '';
-        }
-
-        function deleteCategory(index) {
-            if (confirm("Excluir esta categoria?")) {
-                categories.splice(index, 1);
-                localStorage.setItem('pegasus_categories', JSON.stringify(categories));
-                renderCategoriesList();
-                updateCategoryDropdown();
-            }
-        }
-
-        function updateCategoryDropdown() {
-            const select = document.getElementById('new-category');
-            select.innerHTML = '';
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.textContent = cat;
-                select.appendChild(opt);
-            });
-        }
-
         function renderSales() {
-            const filter = document.getElementById('period-filter').value;
-            const container = document.getElementById('report-table');
+            const container = document.getElementById('sales-list');
             container.innerHTML = '';
-            // (código completo do relatório como na versão anterior)
-            // ... (implementação completa do relatório com filtro e totais)
+            let totalProfit = 0;
+
+            if (orders.length === 0) {
+                container.innerHTML = `<p class="text-zinc-400 text-center py-12">Nenhum pedido registrado ainda.</p>`;
+                return;
+            }
+
+            orders.forEach((order, index) => {
+                let orderProfit = 0;
+                let itemsText = order.items.map(item => {
+                    const product = products.find(p => p.id === item.id);
+                    const cost = product ? product.costPrice : 0;
+                    const profit = (item.price - cost) * item.quantity;
+                    orderProfit += profit;
+                    return `${item.quantity}x ${item.name}`;
+                }).join(', ');
+
+                totalProfit += orderProfit;
+
+                container.innerHTML += `
+                <div class="bg-zinc-800 rounded-2xl p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-zinc-400">${order.date} - ${order.customer || 'Cliente não informado'}</span>
+                        <div>
+                            <button onclick="printOrder(${index})" class="text-blue-400 text-xs mr-4">🖨️ Imprimir</button>
+                            <button onclick="deleteOrder(${index})" class="text-red-500 text-xs">Excluir</button>
+                        </div>
+                    </div>
+                    <p class="text-zinc-100">${itemsText}</p>
+                    <div class="flex justify-between mt-3">
+                        <span class="text-[#d4af77] font-bold">Total Venda: R$ ${order.total},00</span>
+                        <span class="font-bold text-green-500">Lucro: R$ ${orderProfit.toFixed(2)}</span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function printOrder(index) {
+            const order = orders[index];
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <style>
+                    @media print { body { margin: 0; padding: 10mm; font-family: Arial; font-size: 14px; } }
+                    .thermal { width: 80mm; margin: 0 auto; }
+                </style>
+                <div class="thermal">
+                    <h2 style="text-align:center">PEGASUS REPRESENTAÇÕES</h2>
+                    <p style="text-align:center">Pedido #${index + 1}</p>
+                    <p>Data: ${order.date}</p>
+                    <p>Cliente: ${order.customer || 'Não informado'}</p>
+                    <hr>
+                    ${order.items.map(item => `<p>${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}</p>`).join('')}
+                    <hr>
+                    <p><b>Total: R$ ${order.total},00</b></p>
+                </div>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function deleteOrder(index) {
+            if (confirm("Excluir este pedido permanentemente?")) {
+                orders.splice(index, 1);
+                localStorage.setItem('pegasus_orders', JSON.stringify(orders));
+                renderSales();
+            }
         }
 
         function saveAdminChanges() {
             localStorage.setItem('pegasus_products', JSON.stringify(products));
-            localStorage.setItem('pegasus_categories', JSON.stringify(categories));
             alert("✅ Alterações salvas permanentemente!");
             closeAdmin();
             renderProducts(products);
@@ -534,9 +509,6 @@
 
             const savedOrders = localStorage.getItem('pegasus_orders');
             if (savedOrders) orders = JSON.parse(savedOrders);
-
-            const savedCategories = localStorage.getItem('pegasus_categories');
-            if (savedCategories) categories = JSON.parse(savedCategories);
 
             renderProducts(products);
             updateCartCount();
