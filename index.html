@@ -7,7 +7,6 @@
    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- jsPDF + AutoTable para exportar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <link rel="icon" href="https://i.ibb.co/KxncsGgR/ZMUGd.jpg">
@@ -19,10 +18,7 @@
         .admin-section { display: none; }
         .admin-section.active { display: block; }
 
-        /* Estilo para impressão em impressora térmica não-fiscal (80mm) */
-        #print-area {
-            display: none;
-        }
+        #print-area { display: none; }
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
@@ -40,12 +36,11 @@
                 background: white;
                 color: black;
             }
-            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen">
-    <!-- HEADER (mantido igual) -->
+    <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-black border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between h-16">
@@ -72,7 +67,7 @@
         </div>
     </header>
 
-    <!-- Busca (mantido igual) -->
+    <!-- Busca -->
     <div class="max-w-7xl mx-auto px-4 pt-5">
         <div class="relative">
             <input id="search-input" type="text" placeholder="🔎 Buscar..." class="w-full bg-zinc-900 border border-zinc-700 rounded-3xl py-4 px-8 pl-12 text-base" onkeyup="if(event.key === 'Enter') filterProducts()">
@@ -80,17 +75,17 @@
         </div>
     </div>
 
-    <!-- Produtos (mantido igual) -->
+    <!-- Produtos -->
     <main class="max-w-7xl mx-auto px-4 py-6">
         <div id="products-container" class="grid grid-cols-2 gap-4"></div>
     </main>
 
-    <!-- Zoom Modal (mantido igual) -->
+    <!-- Zoom Modal -->
     <div id="zoom-modal" onclick="closeZoom()" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
         <img id="zoom-image" src="" onclick="event.stopImmediatePropagation(); closeZoom()" class="max-w-[90%] max-h-[90%] object-contain cursor-zoom-out">
     </div>
 
-    <!-- Carrinho (mantido igual) -->
+    <!-- Carrinho -->
     <div id="cart-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-end">
         <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[90vh] flex flex-col">
             <div class="p-5 border-b flex justify-between">
@@ -110,7 +105,7 @@
         </div>
     </div>
 
-    <!-- RODAPÉ (mantido igual) -->
+    <!-- RODAPÉ -->
     <footer class="bg-black py-8 text-center">
         <a href="https://wa.me/5527995065360" target="_blank" class="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-5 rounded-3xl text-lg font-medium shadow-xl">
             <i class="fa-brands fa-whatsapp text-3xl"></i> FALAR COM O VENDEDOR
@@ -138,7 +133,6 @@
 
             <!-- ==================== PRODUTOS ==================== -->
             <div id="products-section" class="admin-section active">
-
                 <!-- Cadastrar Novo Produto -->
                 <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
@@ -152,21 +146,19 @@
                     <button onclick="addNewProduct()" class="mt-4 w-full bg-green-600 hover:bg-green-500 py-4 rounded-3xl font-semibold">+ CADASTRAR PRODUTO</button>
                 </div>
 
-                <!-- NOVO: Gerenciar Categorias -->
+                <!-- Gerenciar Categorias -->
                 <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
                     <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
                         <i class="fa-solid fa-tags"></i> Gerenciar Categorias
                     </h3>
                     <div class="flex gap-3">
-                        <input id="new-category-input" placeholder="Nome da nova categoria (maiúsculas)" 
-                               class="flex-1 bg-zinc-800 p-4 rounded-2xl text-base">
-                        <button onclick="addNewCategory()" 
-                                class="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-3xl font-semibold">+ CADASTRAR</button>
+                        <input id="new-category-input" placeholder="Nome da nova categoria (maiúsculas)" class="flex-1 bg-zinc-800 p-4 rounded-2xl text-base">
+                        <button onclick="addNewCategory()" class="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-3xl font-semibold">+ CADASTRAR</button>
                     </div>
                     <div id="categories-list" class="mt-6 flex flex-wrap gap-3"></div>
                 </div>
 
-                <!-- Gerenciar Produtos (mantido igual) -->
+                <!-- Gerenciar Produtos -->
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Gerenciar Produtos</h3>
                     <table class="w-full text-left">
@@ -182,27 +174,41 @@
                 </div>
             </div>
 
-            <!-- ==================== RELATÓRIOS ==================== -->
+            <!-- ==================== RELATÓRIOS DE VENDAS ==================== -->
             <div id="sales-section" class="admin-section">
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-semibold">Relatórios de Vendas</h3>
-                        <!-- NOVO BOTÃO PARA RELATÓRIO DETALHADO -->
-                        <button onclick="generateDetailedReport()" 
-                                class="flex items-center gap-2 bg-[#d4af77] hover:bg-amber-300 text-black px-6 py-3 rounded-3xl font-semibold">
-                            <i class="fa-solid fa-file-chart-pie"></i>
-                            Gerar Relatório por Período
+                        <button onclick="generateDetailedReport()" class="flex items-center gap-2 bg-[#d4af77] hover:bg-amber-300 text-black px-6 py-3 rounded-3xl font-semibold">
+                            <i class="fa-solid fa-file-chart-pie"></i> Gerar Relatório por Período
                         </button>
                     </div>
 
-                    <div class="flex gap-4 mb-6">
-                        <select id="period-filter" class="bg-zinc-800 p-3 rounded-2xl">
-                            <option value="all">Todos os pedidos</option>
-                            <option value="day">Hoje</option>
-                            <option value="month">Este Mês</option>
-                            <option value="year">Este Ano</option>
-                        </select>
-                        <button onclick="renderSales()" class="bg-green-600 px-6 py-3 rounded-2xl">Filtrar</button>
+                    <!-- NOVO FILTRO COM CALENDÁRIO -->
+                    <div class="flex flex-wrap gap-4 mb-6 items-end">
+                        <div>
+                            <label class="block text-xs text-zinc-400 mb-1">Filtro Rápido</label>
+                            <select id="period-filter" class="bg-zinc-800 p-3 rounded-2xl">
+                                <option value="all">Todos os pedidos</option>
+                                <option value="day">Hoje</option>
+                                <option value="month">Este Mês</option>
+                                <option value="year">Este Ano</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-zinc-400 mb-1">Data Inicial</label>
+                            <input type="date" id="start-date" class="bg-zinc-800 p-3 rounded-2xl text-white">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-zinc-400 mb-1">Data Final</label>
+                            <input type="date" id="end-date" class="bg-zinc-800 p-3 rounded-2xl text-white">
+                        </div>
+
+                        <button onclick="renderSales()" class="bg-green-600 px-8 py-3 rounded-3xl font-semibold flex items-center gap-2">
+                            <i class="fa-solid fa-filter"></i> ATIVAR FILTRO
+                        </button>
                     </div>
 
                     <div id="sales-list" class="space-y-6"></div>
@@ -214,14 +220,12 @@
     </div>
 
     <!-- MODAL RELATÓRIO DETALHADO -->
-    <div id="detailed-report-modal" onclick="if(event.target.id==='detailed-report-modal')closeDetailedReport()" 
-         class="hidden fixed inset-0 bg-black/95 z-[600] flex items-center justify-center">
+    <div id="detailed-report-modal" onclick="if(event.target.id==='detailed-report-modal')closeDetailedReport()" class="hidden fixed inset-0 bg-black/95 z-[600] flex items-center justify-center">
         <div class="bg-zinc-900 w-full max-w-5xl mx-4 rounded-3xl overflow-hidden">
             <div class="p-6 border-b flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-[#d4af77]">Relatório Detalhado de Vendas por Período</h2>
                 <div class="flex items-center gap-3">
-                    <button onclick="exportReportToPDF()" 
-                            class="flex items-center gap-2 bg-green-600 hover:bg-green-500 px-6 py-2 rounded-3xl text-sm font-medium">
+                    <button onclick="exportReportToPDF()" class="flex items-center gap-2 bg-green-600 hover:bg-green-500 px-6 py-2 rounded-3xl text-sm font-medium">
                         <i class="fa-solid fa-file-pdf"></i> Exportar PDF
                     </button>
                     <button onclick="closeDetailedReport()" class="text-4xl text-red-400">✕</button>
@@ -243,7 +247,7 @@
         let orders = [];
         let categories = [];
 
-        // ====================== FUNÇÕES DA LOJA (mantidas iguais) ======================
+        // ====================== FUNÇÕES DA LOJA ======================
         function renderProducts(filtered) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
@@ -264,15 +268,15 @@
             });
         }
 
-        function zoomImage(src) { /* mantido igual */ 
+        function zoomImage(src) {
             document.getElementById('zoom-image').src = src;
             document.getElementById('zoom-modal').classList.remove('hidden');
         }
-        function closeZoom() { /* mantido igual */ 
+        function closeZoom() {
             document.getElementById('zoom-modal').classList.add('hidden');
         }
 
-        function filterProducts() { /* mantido igual */ 
+        function filterProducts() {
             const term = document.getElementById('search-input').value.toLowerCase();
             let filtered = products.filter(p =>
                 p.active && (currentCategory === 'all' || p.category === currentCategory) &&
@@ -281,7 +285,7 @@
             renderProducts(filtered);
         }
 
-        function selectCategory(cat) { /* mantido igual */ 
+        function selectCategory(cat) {
             currentCategory = cat;
             document.querySelectorAll('.category-btn').forEach(btn => {
                 const isActive = (cat === 'all' && btn.id === 'cat-all') || btn.id === `cat-${cat}`;
@@ -292,7 +296,7 @@
             filterProducts();
         }
 
-        function addToCart(id) { /* mantido igual */ 
+        function addToCart(id) {
             const product = products.find(p => p.id === id);
             if (!product || !product.active) return;
             const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
@@ -302,18 +306,18 @@
             updateCartCount();
         }
 
-        function updateCartCount() { /* mantido igual */ 
+        function updateCartCount() {
             const count = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').textContent = count;
         }
 
-        function toggleCart() { /* mantido igual */ 
+        function toggleCart() {
             const modal = document.getElementById('cart-modal');
             modal.classList.toggle('hidden');
             if (!modal.classList.contains('hidden')) renderCart();
         }
 
-        function renderCart() { /* mantido igual */ 
+        function renderCart() {
             const container = document.getElementById('cart-items');
             container.innerHTML = '';
             if (cart.length === 0) {
@@ -341,13 +345,13 @@
             document.getElementById('cart-total').textContent = `R$ ${total},00`;
         }
 
-        function removeFromCart(id) { /* mantido igual */ 
+        function removeFromCart(id) {
             cart = cart.filter(item => item.id !== id);
             updateCartCount();
             renderCart();
         }
 
-        function finalizeOrder() { /* mantido igual */ 
+        function finalizeOrder() {
             if (cart.length === 0) return;
             const customerName = prompt("Informe o Nome Completo do Cliente:");
             if (!customerName) return alert("Nome é obrigatório!");
@@ -400,7 +404,7 @@
             if (section === 'sales-section') renderSales();
         }
 
-        // ====================== CATEGORIAS DINÂMICAS ======================
+        // ====================== CATEGORIAS ======================
         function loadCategories() {
             const saved = localStorage.getItem('pegasus_categories');
             categories = saved ? JSON.parse(saved) : ["CIGARROS", "SEDAS", "FUMOS", "ACESSORIOS"];
@@ -483,24 +487,24 @@
             });
         }
 
-        function deleteProduct(id) { /* mantido igual */ 
+        function deleteProduct(id) {
             if (confirm("Deseja realmente excluir este produto?")) {
                 products = products.filter(p => p.id !== id);
                 renderAdminProducts();
             }
         }
 
-        function updateCostPrice(id, newCost) { /* mantido igual */ 
+        function updateCostPrice(id, newCost) {
             const product = products.find(p => p.id === id);
             if (product) product.costPrice = parseFloat(newCost);
         }
 
-        function updatePrice(id, newPrice) { /* mantido igual */ 
+        function updatePrice(id, newPrice) {
             const product = products.find(p => p.id === id);
             if (product) product.price = parseFloat(newPrice);
         }
 
-        function toggleProduct(id) { /* mantido igual */ 
+        function toggleProduct(id) {
             const product = products.find(p => p.id === id);
             if (product) product.active = !product.active;
             renderAdminProducts();
@@ -528,17 +532,37 @@
             document.getElementById('new-price').value = '';
         }
 
-        // ====================== RELATÓRIOS ======================
+        // ====================== RELATÓRIOS - NOVO FILTRO COM CALENDÁRIO ======================
         function getFilteredOrders() {
-            const filter = document.getElementById('period-filter').value;
+            const quickFilter = document.getElementById('period-filter').value;
+            const startStr = document.getElementById('start-date').value;   // YYYY-MM-DD
+            const endStr   = document.getElementById('end-date').value;
+
+            // Se o usuário preencheu as datas do calendário, usa o período personalizado
+            if (startStr && endStr) {
+                const start = new Date(startStr);
+                const end   = new Date(endStr);
+                end.setHours(23, 59, 59, 999); // inclui o dia final completo
+
+                return orders.filter(order => {
+                    const [datePart] = order.date.split(' ');
+                    const [day, month, year] = datePart.split('/').map(Number);
+                    const orderDate = new Date(year, month - 1, day);
+                    return orderDate >= start && orderDate <= end;
+                });
+            }
+
+            // Senão, usa o filtro rápido (todos, hoje, mês, ano)
             const now = new Date();
             return orders.filter(order => {
-                const dateStr = order.date.split(' ')[0].split('/').reverse().join('-');
-                const orderDate = new Date(dateStr);
-                if (filter === 'all') return true;
-                if (filter === 'day') return orderDate.toDateString() === now.toDateString();
-                if (filter === 'month') return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
-                if (filter === 'year') return orderDate.getFullYear() === now.getFullYear();
+                const [datePart] = order.date.split(' ');
+                const [day, month, year] = datePart.split('/').map(Number);
+                const orderDate = new Date(year, month - 1, day);
+
+                if (quickFilter === 'all') return true;
+                if (quickFilter === 'day') return orderDate.toDateString() === now.toDateString();
+                if (quickFilter === 'month') return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+                if (quickFilter === 'year') return orderDate.getFullYear() === now.getFullYear();
                 return true;
             });
         }
@@ -584,7 +608,7 @@
             });
         }
 
-        // ====================== RELATÓRIO DETALHADO POR PRODUTO ======================
+        // ====================== RELATÓRIO DETALHADO ======================
         function generateDetailedReport() {
             const filteredOrders = getFilteredOrders();
             const summary = {};
@@ -680,7 +704,7 @@
             alert("✅ PDF gerado com sucesso!");
         }
 
-        // ====================== IMPRIMIR PEDIDO EM IMPRESSORA TÉRMICA ======================
+        // ====================== IMPRESSÃO TÉRMICA ======================
         function printOrder(index) {
             const order = orders[index];
             if (!order) return;
@@ -723,7 +747,7 @@
             printArea.style.display = 'none';
         }
 
-        function deleteOrder(index) { /* mantido igual */ 
+        function deleteOrder(index) {
             if (confirm("Excluir este pedido?")) {
                 orders.splice(index, 1);
                 localStorage.setItem('pegasus_orders', JSON.stringify(orders));
