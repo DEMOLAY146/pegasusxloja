@@ -184,13 +184,13 @@
                         </button>
                     </div>
 
-                    <!-- NOVO FILTRO COM CALENDÁRIO -->
+                    <!-- FILTRO CORRIGIDO -->
                     <div class="flex flex-wrap gap-4 mb-6 items-end">
                         <div>
                             <label class="block text-xs text-zinc-400 mb-1">Filtro Rápido</label>
-                            <select id="period-filter" class="bg-zinc-800 p-3 rounded-2xl">
+                            <select id="period-filter" onchange="clearDateFields()" class="bg-zinc-800 p-3 rounded-2xl">
                                 <option value="all">Todos os pedidos</option>
-                                <option value="day">Hoje</option>
+                                <option value="day" selected>Hoje</option>
                                 <option value="month">Este Mês</option>
                                 <option value="year">Este Ano</option>
                             </select>
@@ -532,37 +532,55 @@
             document.getElementById('new-price').value = '';
         }
 
-        // ====================== RELATÓRIOS - NOVO FILTRO COM CALENDÁRIO ======================
+        // ====================== FUNÇÃO AUXILIAR PARA DATA (CORREÇÃO DO BUG) ======================
+        function getOrderDateObj(dateStr) {
+            const [datePart] = dateStr.split(' ');
+            const [day, month, year] = datePart.split('/').map(Number);
+            return new Date(year, month - 1, day); // sempre 00:00 local
+        }
+
+        function clearDateFields() {
+            document.getElementById('start-date').value = '';
+            document.getElementById('end-date').value = '';
+        }
+
+        // ====================== RELATÓRIOS - FILTRO CORRIGIDO ======================
         function getFilteredOrders() {
             const quickFilter = document.getElementById('period-filter').value;
-            const startStr = document.getElementById('start-date').value;   // YYYY-MM-DD
+            const startStr = document.getElementById('start-date').value;
             const endStr   = document.getElementById('end-date').value;
 
-            // Se o usuário preencheu as datas do calendário, usa o período personalizado
+            // 1. Se o usuário preencheu AMBOS os campos de data → usa período personalizado
             if (startStr && endStr) {
                 const start = new Date(startStr);
                 const end   = new Date(endStr);
-                end.setHours(23, 59, 59, 999); // inclui o dia final completo
+                end.setHours(23, 59, 59, 999);
 
                 return orders.filter(order => {
-                    const [datePart] = order.date.split(' ');
-                    const [day, month, year] = datePart.split('/').map(Number);
-                    const orderDate = new Date(year, month - 1, day);
+                    const orderDate = getOrderDateObj(order.date);
                     return orderDate >= start && orderDate <= end;
                 });
             }
 
-            // Senão, usa o filtro rápido (todos, hoje, mês, ano)
+            // 2. Senão usa o filtro rápido (Aqui estava o bug principal)
             const now = new Date();
             return orders.filter(order => {
-                const [datePart] = order.date.split(' ');
-                const [day, month, year] = datePart.split('/').map(Number);
-                const orderDate = new Date(year, month - 1, day);
+                const orderDate = getOrderDateObj(order.date);
 
                 if (quickFilter === 'all') return true;
-                if (quickFilter === 'day') return orderDate.toDateString() === now.toDateString();
-                if (quickFilter === 'month') return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
-                if (quickFilter === 'year') return orderDate.getFullYear() === now.getFullYear();
+                if (quickFilter === 'day') {
+                    // Comparação confiável por dia (sem depender de toDateString())
+                    return orderDate.getFullYear() === now.getFullYear() &&
+                           orderDate.getMonth() === now.getMonth() &&
+                           orderDate.getDate() === now.getDate();
+                }
+                if (quickFilter === 'month') {
+                    return orderDate.getFullYear() === now.getFullYear() &&
+                           orderDate.getMonth() === now.getMonth();
+                }
+                if (quickFilter === 'year') {
+                    return orderDate.getFullYear() === now.getFullYear();
+                }
                 return true;
             });
         }
@@ -615,9 +633,7 @@
 
             filteredOrders.forEach(order => {
                 order.items.forEach(item => {
-                    if (!summary[item.name]) {
-                        summary[item.name] = { qty: 0, costTotal: 0, revenue: 0 };
-                    }
+                    if (!summary[item.name]) summary[item.name] = { qty: 0, costTotal: 0, revenue: 0 };
                     const product = products.find(p => p.id === item.id);
                     const unitCost = product ? product.costPrice : 0;
                     summary[item.name].qty += item.quantity;
@@ -678,14 +694,12 @@
         function exportReportToPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
             doc.setFontSize(16);
             doc.text("Relatório Detalhado de Vendas - PEGASUS REPRESENTAÇÕES", 14, 20);
 
             const table = document.getElementById('detailed-report-table');
             const rows = [];
             const headers = ["Produto", "Quantidade Vendida", "Custo Total (R$)", "Lucro Total (R$)"];
-
             Array.from(table.rows).forEach(row => {
                 const cells = Array.from(row.cells).map(cell => cell.textContent.trim());
                 rows.push(cells);
@@ -708,7 +722,6 @@
         function printOrder(index) {
             const order = orders[index];
             if (!order) return;
-
             const printArea = document.getElementById('print-area');
             let html = `
             <div style="text-align:center; width:80mm; margin:0 auto;">
@@ -774,6 +787,9 @@
 
             renderProducts(products);
             updateCartCount();
+
+            // Garante que o filtro "Hoje" funcione imediatamente ao abrir o painel
+            renderSales();
         };
     </script>
 </body>
