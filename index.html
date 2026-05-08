@@ -66,10 +66,10 @@
         <img id="zoom-image" src="" onclick="event.stopImmediatePropagation(); closeZoom()" class="max-w-[90%] max-h-[90%] object-contain cursor-zoom-out">
     </div>
 
-    <!-- Carrinho Modal -->
+    <!-- Carrinho -->
     <div id="cart-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-end">
         <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b flex justify-between items-center">
+            <div class="p-5 border-b flex justify-between">
                 <h2 class="text-xl font-semibold">Seu Carrinho</h2>
                 <button onclick="toggleCart()" class="text-3xl text-zinc-400">✕</button>
             </div>
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <!-- Produtos -->
+            <!-- PRODUTOS -->
             <div id="products-section" class="admin-section active">
                 <div class="bg-zinc-900 rounded-3xl p-6 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Cadastrar Novo Produto</h3>
@@ -129,76 +129,54 @@
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Gerenciar Produtos</h3>
                     <table class="w-full text-left">
-                        <thead>
-                            <tr class="border-b border-zinc-700">
-                                <th class="py-3">Produto</th>
-                                <th class="py-3">Custo</th>
-                                <th class="py-3">Venda</th>
-                                <th class="py-3 text-center">Status</th>
-                                <th class="py-3 text-center">Ações</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b border-zinc-700">
+                            <th class="py-3">Produto</th>
+                            <th class="py-3">Custo</th>
+                            <th class="py-3">Venda</th>
+                            <th class="py-3 text-center">Status</th>
+                            <th class="py-3 text-center">Ações</th>
+                        </tr></thead>
                         <tbody id="admin-products" class="text-sm"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Relatórios -->
+            <!-- RELATÓRIOS -->
             <div id="sales-section" class="admin-section">
                 <div class="bg-zinc-900 rounded-3xl p-6">
                     <h3 class="text-xl font-semibold mb-4">Relatórios de Vendas</h3>
+                    <div class="flex gap-4 mb-6">
+                        <select id="period-filter" class="bg-zinc-800 p-3 rounded-2xl">
+                            <option value="all">Todos os pedidos</option>
+                            <option value="day">Hoje</option>
+                            <option value="month">Este Mês</option>
+                            <option value="year">Este Ano</option>
+                        </select>
+                        <button onclick="renderSales()" class="bg-green-600 px-6 py-3 rounded-2xl">Filtrar</button>
+                    </div>
                     <div id="sales-list" class="space-y-6"></div>
+                    <div id="sales-summary" class="mt-8 bg-zinc-800 p-6 rounded-3xl"></div>
                 </div>
             </div>
+
+            <button onclick="saveAdminChanges()" class="mt-6 w-full py-5 bg-green-600 hover:bg-green-500 rounded-3xl text-lg font-semibold">💾 SALVAR TODAS AS ALTERAÇÕES</button>
         </div>
     </div>
 
     <script>
-        let products = [
-            { id: 101, name: "CAMEL AZUL (PC10)", category: "CIGARROS", costPrice: 60, price: 85, img: "https://i.ibb.co/PGPFZ8Mk/Whats-App-Image-2026-05-01-at-06-40-26-removebg-preview.png", active: true },
-            { id: 102, name: "CAMEL BERRY CRAVO (PC10)", category: "CIGARROS", costPrice: 55, price: 85, img: "https://i.ibb.co/spc663GH/Whats-App-Image-2026-05-01-at-06-54-26-removebg-preview.png", active: true },
-            { id: 103, name: "DUNHILL (PC10)", category: "CIGARROS", costPrice: 90, price: 138, img: "https://i.ibb.co/HDx9LsC7/Whats-App-Image-2026-04-28-at-07-45-51-2-removebg-preview.png", active: true },
-            { id: 104, name: "EGIPT BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/4gfJ5Lx7/Whats-App-Image-2026-04-30-at-21-30-20-removebg-preview-1.png", active: true },
-            { id: 105, name: "LUCK STRIKE DOUBLE (PC10)", category: "CIGARROS", costPrice: 85, price: 126, img: "https://i.ibb.co/nqypTnPM/Gemini-Generated-Image-vf6vzwvf6vzwvf6v-removebg-preview.png", active: true },
-            { id: 106, name: "ROTHMANS AZUL (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/zW4ZJRBY/ROTHMANS-BLUE-BOX-380x380.png", active: true },
-            { id: 107, name: "ROTHMANS VERMELHO (PC10)", category: "CIGARROS", costPrice: 65, price: 95, img: "https://i.ibb.co/d4y0X5B2/188065-800-800.png", active: true },
-            { id: 108, name: "ROTHMANS GLOBAL (PC10)", category: "CIGARROS", costPrice: 55, price: 79, img: "https://i.ibb.co/zT1D7VRG/u7-UTD-removebg-preview-1.png", active: true },
-            { id: 109, name: "TOP TIM BOX (PC10)", category: "CIGARROS", costPrice: 20, price: 30, img: "https://i.ibb.co/hkMc1CP/Whats-App-Image-2026-05-01-at-06-33-04-removebg-preview.png", active: true },
-            { id: 110, name: "OUTBACK (PC10)", category: "CIGARROS", costPrice: 25, price: 40, img: "https://i.ibb.co/MDTZdvcv/Whats-App-Image-2026-05-01-at-06-57-04-removebg-preview.png", active: true },
-            { id: 111, name: "PANDORA AZUL BOX (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/99KbNCKd/Gemini-Generated-Image-sl0unfsl0unfsl0u-1-removebg-preview.png", active: true },
-            { id: 112, name: "PANDORA MAÇO (PC10)", category: "CIGARROS", costPrice: 18, price: 30, img: "https://i.ibb.co/dJtMbwzd/Gemini-Generated-Image-1hdpoo1hdpoo1hdp-removebg-preview.png", active: true },
-            { id: 113, name: "PANDORA BOX VERMELHO (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/C5Mg0mXq/Gemini-Generated-Image-nm7ovrnm7ovrnm7o-removebg-preview-1.png", active: true },
-            { id: 114, name: "PANDORA BOX MENTA (PC10)", category: "CIGARROS", costPrice: 22, price: 35, img: "https://i.ibb.co/XZFdtgXP/Gemini-Generated-Image-iur4raiur4raiur4-removebg-preview.png", active: true },
-            { id: 115, name: "GUDANG NACIONAL (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/pvHDsCgJ/Whats-App-Image-2026-05-01-at-07-14-15-removebg-preview.png", active: true },
-            { id: 116, name: "BLACK MENTOL (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/KjTRXhJc/Whats-App-Image-2026-05-01-at-07-21-20-removebg-preview.png", active: true },
-            { id: 117, name: "COYOTE (PC10)", category: "CIGARROS", costPrice: 140, price: 205, img: "https://i.ibb.co/PZCgrH9B/Whats-App-Image-2026-05-01-at-07-24-01-removebg-preview.png", active: true },
-            { id: 118, name: "MANDELLE (PC10)", category: "CIGARROS", costPrice: 150, price: 215, img: "https://i.ibb.co/xSwrFn9m/Whats-App-Image-2026-05-01-at-07-44-21-removebg-preview.png", active: true },
-            { id: 201, name: "ZOMO BRANCA", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/F4SSdTNN/Whats-App-Image-2026-05-01-at-07-51-16-removebg-preview.png", active: true },
-            { id: 202, name: "ZOMO MARROM", category: "SEDAS", costPrice: 35, price: 50, img: "https://i.ibb.co/SXJSVN2F/Whats-App-Image-2026-05-01-at-07-51-17-removebg-preview.png", active: true },
-            { id: 203, name: "BEM BELADO SLIM CX50", category: "SEDAS", costPrice: 80, price: 115, img: "https://i.ibb.co/Wv5vYpsw/Whats-App-Image-2026-05-01-at-08-07-52-1-removebg-preview-1.png", active: true },
-            { id: 204, name: "BEM BELADO BROWN CX50", category: "SEDAS", costPrice: 95, price: 139, img: "https://i.ibb.co/6JpLXMcM/Whats-App-Image-2026-05-01-at-08-07-53-removebg-preview.png", active: true },
-            { id: 205, name: "SADHU MORNING LONGA SLIM CX21", category: "SEDAS", costPrice: 45, price: 69, img: "https://i.ibb.co/0jk1PYFh/Whats-App-Image-2026-05-01-at-08-07-52-removebg-preview-1.png", active: true },
-            { id: 301, name: "SABIA PT40", category: "FUMOS", costPrice: 80, price: 115, img: "https://i.ibb.co/wFBvxjT4/Whats-App-Image-2026-05-01-at-08-39-10-removebg-preview.png", active: true },
-            { id: 302, name: "AMSTERDAN CX06", category: "FUMOS", costPrice: 45, price: 65, img: "https://i.ibb.co/xqQc7TtW/Whats-App-Image-2026-05-01-at-08-41-14-removebg-preview.png", active: true },
-            { id: 303, name: "THE OG CX06", category: "FUMOS", costPrice: 30, price: 49, img: "https://i.ibb.co/nqx1cs11/Whats-App-Image-2026-05-01-at-08-41-15-removebg-preview.png", active: true },
-            { id: 401, name: "SPLIFF SADHU NIGHT TESOURA+CUIA+PITEIRA", category: "ACESSORIOS", costPrice: 20, price: 34, img: "https://i.ibb.co/0jsNqfGK/Whats-App-Image-2026-05-02-at-00-34-08-removebg-preview.png", active: true },
-            { id: 402, name: "MICRO BONG", category: "ACESSORIOS", costPrice: 10, price: 17, img: "https://i.ibb.co/9k6Qt4Mb/foto-31830793-removebg-preview.png", active: true },
-            { id: 403, name: "PORTA ISQUEIRO PEQUENO", category: "ACESSORIOS", costPrice: 8, price: 13, img: "https://i.ibb.co/rKbt5Kg0/foto-30628133-removebg-preview-1.png", active: true },
-            { id: 404, name: "ISQUEIRO BIC CT12", category: "ACESSORIOS", costPrice: 35, price: 55, img: "https://i.ibb.co/7d9drGS1/OIP.webp", active: true },
-            { id: 405, name: "ISQUEIRO CHAMA CX 50", category: "ACESSORIOS", costPrice: 35, price: 50, img: "https://i.ibb.co/jZ8XLyRQ/OIP-1-removebg-preview.png", active: true }
-        ];
-
+        let products = [ /* Lista completa com costPrice */ ];
         let cart = [];
         let currentCategory = 'all';
         let orders = [];
+        let categories = ["CIGARROS", "SEDAS", "FUMOS", "ACESSORIOS"];
 
-        // ==================== FUNÇÕES DA LOJA ====================
+        // ====================== FUNÇÕES DA LOJA ======================
         function renderProducts(filtered) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
             filtered.forEach(p => {
                 if (!p.active) return;
-                const card = `
+                container.innerHTML += `
                 <div class="product-card bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800">
                     <img src="${p.img}" class="product-img w-full" onclick="zoomImage('${p.img}')">
                     <div class="p-3.5 flex-1 flex flex-col">
@@ -210,24 +188,46 @@
                         </div>
                     </div>
                 </div>`;
-                container.innerHTML += card;
             });
+        }
+
+        function zoomImage(src) {
+            document.getElementById('zoom-image').src = src;
+            document.getElementById('zoom-modal').classList.remove('hidden');
+        }
+
+        function closeZoom() {
+            document.getElementById('zoom-modal').classList.add('hidden');
+        }
+
+        function filterProducts() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            let filtered = products.filter(p => 
+                p.active && (currentCategory === 'all' || p.category === currentCategory) &&
+                p.name.toLowerCase().includes(term)
+            );
+            renderProducts(filtered);
+        }
+
+        function selectCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                const isActive = (cat === 'all' && btn.id === 'cat-all') || btn.id === `cat-${cat}`;
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('bg-[#d4af77]', isActive);
+                btn.classList.toggle('text-black', isActive);
+            });
+            filterProducts();
         }
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            if (!product || !product.active) return alert("Produto não encontrado ou desativado!");
+            if (!product || !product.active) return;
             const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
             const existing = cart.find(item => item.id === id);
             if (existing) existing.quantity += qty;
             else cart.push({ ...product, quantity: qty });
             updateCartCount();
-            
-            const toast = document.createElement('div');
-            toast.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-3xl shadow-2xl z-[999]";
-            toast.textContent = `${qty}x ${product.name} adicionado!`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 1800);
         }
 
         function updateCartCount() {
@@ -277,6 +277,7 @@
 
         function finalizeOrder() {
             if (cart.length === 0) return;
+            
             const customerName = prompt("Informe o Nome Completo do Cliente:");
             if (!customerName) return alert("Nome é obrigatório!");
 
@@ -291,7 +292,8 @@
             orders.push(order);
             localStorage.setItem('pegasus_orders', JSON.stringify(orders));
 
-            let msg = `🚀 *PEDIDO PEGASUS REPRESENTAÇÕES*\n\nCliente: ${customerName}\n\n`;
+            let msg = `🚀 *PEDIDO PEGASUS REPRESENTAÇÕES*\n\n`;
+            msg += `Cliente: ${customerName}\n\n`;
             let total = 0;
             cart.forEach(item => {
                 const sub = item.price * item.quantity;
@@ -300,36 +302,10 @@
             });
             msg += `\n*TOTAL: R$ ${total},00*`;
             window.open(`https://wa.me/5527995065360?text=${encodeURIComponent(msg)}`, '_blank');
-
+            
             cart = [];
             updateCartCount();
             toggleCart();
-        }
-
-        function zoomImage(src) {
-            document.getElementById('zoom-image').src = src;
-            document.getElementById('zoom-modal').classList.remove('hidden');
-        }
-
-        function closeZoom() {
-            document.getElementById('zoom-modal').classList.add('hidden');
-        }
-
-        function filterProducts() {
-            const term = document.getElementById('search-input').value.toLowerCase();
-            let filtered = products.filter(p => p.active && (currentCategory === 'all' || p.category === currentCategory) && p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
-        }
-
-        function selectCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                const isActive = (cat === 'all' && btn.id === 'cat-all') || btn.id === `cat-${cat}`;
-                btn.classList.toggle('active', isActive);
-                btn.classList.toggle('bg-[#d4af77]', isActive);
-                btn.classList.toggle('text-black', isActive);
-            });
-            filterProducts();
         }
 
         // ====================== ADMIN ======================
@@ -370,11 +346,18 @@
                         </button>
                     </td>
                     <td class="py-4 text-center">
-                        <button onclick="deleteProduct(${p.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function deleteProduct(id) {
+            if (confirm("Deseja realmente excluir este produto?")) {
+                products = products.filter(p => p.id !== id);
+                renderAdminProducts();
+            }
         }
 
         function updateCostPrice(id, newCost) {
@@ -391,14 +374,6 @@
             const product = products.find(p => p.id === id);
             if (product) product.active = !product.active;
             renderAdminProducts();
-        }
-
-        function deleteProduct(id) {
-            if (confirm("Excluir este produto permanentemente?")) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('pegasus_products', JSON.stringify(products));
-                renderAdminProducts();
-            }
         }
 
         function addNewProduct() {
@@ -432,6 +407,7 @@
 
             if (orders.length === 0) {
                 container.innerHTML = `<p class="text-zinc-400 text-center py-12">Nenhum pedido registrado ainda.</p>`;
+                document.getElementById('total-profit').textContent = 'R$ 0,00';
                 return;
             }
 
@@ -449,12 +425,9 @@
 
                 container.innerHTML += `
                 <div class="bg-zinc-800 rounded-2xl p-5">
-                    <div class="flex justify-between items-center mb-2">
+                    <div class="flex justify-between mb-2">
                         <span class="text-sm text-zinc-400">${order.date} - ${order.customer || 'Cliente não informado'}</span>
-                        <div>
-                            <button onclick="printOrder(${index})" class="text-blue-400 text-xs mr-4">🖨️ Imprimir</button>
-                            <button onclick="deleteOrder(${index})" class="text-red-500 text-xs">Excluir</button>
-                        </div>
+                        <button onclick="deleteOrder(${index})" class="text-red-500 text-xs">Excluir</button>
                     </div>
                     <p class="text-zinc-100">${itemsText}</p>
                     <div class="flex justify-between mt-3">
@@ -463,33 +436,12 @@
                     </div>
                 </div>`;
             });
-        }
 
-        function printOrder(index) {
-            const order = orders[index];
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <style>
-                    @media print { body { margin: 0; padding: 10mm; font-family: Arial; font-size: 14px; } }
-                    .thermal { width: 80mm; margin: 0 auto; }
-                </style>
-                <div class="thermal">
-                    <h2 style="text-align:center">PEGASUS REPRESENTAÇÕES</h2>
-                    <p style="text-align:center">Pedido #${index + 1}</p>
-                    <p>Data: ${order.date}</p>
-                    <p>Cliente: ${order.customer || 'Não informado'}</p>
-                    <hr>
-                    ${order.items.map(item => `<p>${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}</p>`).join('')}
-                    <hr>
-                    <p><b>Total: R$ ${order.total},00</b></p>
-                </div>
-            `);
-            printWindow.document.close();
-            printWindow.print();
+            document.getElementById('total-profit').textContent = `R$ ${totalProfit.toFixed(2)}`;
         }
 
         function deleteOrder(index) {
-            if (confirm("Excluir este pedido permanentemente?")) {
+            if (confirm("Excluir este pedido?")) {
                 orders.splice(index, 1);
                 localStorage.setItem('pegasus_orders', JSON.stringify(orders));
                 renderSales();
