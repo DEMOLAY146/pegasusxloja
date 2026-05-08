@@ -184,28 +184,17 @@
                         </button>
                     </div>
 
-                    <!-- FILTRO CORRIGIDO -->
-                    <div class="flex flex-wrap gap-4 mb-6 items-end">
-                        <div>
-                            <label class="block text-xs text-zinc-400 mb-1">Filtro Rápido</label>
-                            <select id="period-filter" onchange="clearDateFields()" class="bg-zinc-800 p-3 rounded-2xl">
+                    <!-- FILTRO ALTERADO PARA DIA / MÊS / ANO -->
+                    <div class="flex gap-4 mb-6 items-end">
+                        <div class="flex-1">
+                            <label class="block text-xs text-zinc-400 mb-1">Filtrar por Período</label>
+                            <select id="period-filter" onchange="renderSales()" class="bg-zinc-800 p-3 rounded-2xl w-full">
                                 <option value="all">Todos os pedidos</option>
-                                <option value="day" selected>Hoje</option>
-                                <option value="month">Este Mês</option>
-                                <option value="year">Este Ano</option>
+                                <option value="day" selected>Dia (Hoje)</option>
+                                <option value="month">Mês (Este Mês)</option>
+                                <option value="year">Ano (Este Ano)</option>
                             </select>
                         </div>
-
-                        <div>
-                            <label class="block text-xs text-zinc-400 mb-1">Data Inicial</label>
-                            <input type="date" id="start-date" class="bg-zinc-800 p-3 rounded-2xl text-white">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs text-zinc-400 mb-1">Data Final</label>
-                            <input type="date" id="end-date" class="bg-zinc-800 p-3 rounded-2xl text-white">
-                        </div>
-
                         <button onclick="renderSales()" class="bg-green-600 px-8 py-3 rounded-3xl font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-filter"></i> ATIVAR FILTRO
                         </button>
@@ -532,44 +521,23 @@
             document.getElementById('new-price').value = '';
         }
 
-        // ====================== FUNÇÃO AUXILIAR PARA DATA (CORREÇÃO DO BUG) ======================
+        // ====================== FUNÇÃO AUXILIAR PARA DATA ======================
         function getOrderDateObj(dateStr) {
             const [datePart] = dateStr.split(' ');
             const [day, month, year] = datePart.split('/').map(Number);
-            return new Date(year, month - 1, day); // sempre 00:00 local
+            return new Date(year, month - 1, day);
         }
 
-        function clearDateFields() {
-            document.getElementById('start-date').value = '';
-            document.getElementById('end-date').value = '';
-        }
-
-        // ====================== RELATÓRIOS - FILTRO CORRIGIDO ======================
+        // ====================== RELATÓRIOS - FILTRO ALTERADO PARA DIA / MÊS / ANO ======================
         function getFilteredOrders() {
             const quickFilter = document.getElementById('period-filter').value;
-            const startStr = document.getElementById('start-date').value;
-            const endStr   = document.getElementById('end-date').value;
-
-            // 1. Se o usuário preencheu AMBOS os campos de data → usa período personalizado
-            if (startStr && endStr) {
-                const start = new Date(startStr);
-                const end   = new Date(endStr);
-                end.setHours(23, 59, 59, 999);
-
-                return orders.filter(order => {
-                    const orderDate = getOrderDateObj(order.date);
-                    return orderDate >= start && orderDate <= end;
-                });
-            }
-
-            // 2. Senão usa o filtro rápido (Aqui estava o bug principal)
             const now = new Date();
+
             return orders.filter(order => {
                 const orderDate = getOrderDateObj(order.date);
 
                 if (quickFilter === 'all') return true;
                 if (quickFilter === 'day') {
-                    // Comparação confiável por dia (sem depender de toDateString())
                     return orderDate.getFullYear() === now.getFullYear() &&
                            orderDate.getMonth() === now.getMonth() &&
                            orderDate.getDate() === now.getDate();
@@ -788,7 +756,7 @@
             renderProducts(products);
             updateCartCount();
 
-            // Garante que o filtro "Hoje" funcione imediatamente ao abrir o painel
+            // Carrega automaticamente o filtro "Dia" ao abrir o painel
             renderSales();
         };
     </script>
