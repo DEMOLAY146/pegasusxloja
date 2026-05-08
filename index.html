@@ -184,7 +184,7 @@
                         </button>
                     </div>
 
-                    <!-- FILTRO ALTERADO PARA DIA / MÊS / ANO -->
+                    <!-- FILTRO DIA / MÊS / ANO (TOTALMENTE ATIVADO) -->
                     <div class="flex gap-4 mb-6 items-end">
                         <div class="flex-1">
                             <label class="block text-xs text-zinc-400 mb-1">Filtrar por Período</label>
@@ -521,34 +521,45 @@
             document.getElementById('new-price').value = '';
         }
 
-        // ====================== FUNÇÃO AUXILIAR PARA DATA ======================
+        // ====================== DATA ROBUSTA (CORREÇÃO PRINCIPAL) ======================
         function getOrderDateObj(dateStr) {
-            const [datePart] = dateStr.split(' ');
-            const [day, month, year] = datePart.split('/').map(Number);
-            return new Date(year, month - 1, day);
+            // Formato esperado: "07/05/2026 22:30:45"
+            const datePart = dateStr.split(' ')[0].trim();
+            const parts = datePart.split('/');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1;
+                const year = parseInt(parts[2], 10);
+                return new Date(year, month, day);
+            }
+            return new Date(0); // data inválida
         }
 
-        // ====================== RELATÓRIOS - FILTRO ALTERADO PARA DIA / MÊS / ANO ======================
+        // ====================== RELATÓRIOS - FILTRO TOTALMENTE ATIVADO ======================
         function getFilteredOrders() {
-            const quickFilter = document.getElementById('period-filter').value;
+            const filter = document.getElementById('period-filter').value;
             const now = new Date();
 
             return orders.filter(order => {
                 const orderDate = getOrderDateObj(order.date);
 
-                if (quickFilter === 'all') return true;
-                if (quickFilter === 'day') {
+                if (filter === 'all') return true;
+
+                if (filter === 'day') {
                     return orderDate.getFullYear() === now.getFullYear() &&
                            orderDate.getMonth() === now.getMonth() &&
                            orderDate.getDate() === now.getDate();
                 }
-                if (quickFilter === 'month') {
+
+                if (filter === 'month') {
                     return orderDate.getFullYear() === now.getFullYear() &&
                            orderDate.getMonth() === now.getMonth();
                 }
-                if (quickFilter === 'year') {
+
+                if (filter === 'year') {
                     return orderDate.getFullYear() === now.getFullYear();
                 }
+
                 return true;
             });
         }
@@ -559,7 +570,8 @@
             const filteredOrders = getFilteredOrders();
 
             if (filteredOrders.length === 0) {
-                container.innerHTML = `<p class="text-zinc-400 text-center py-12">Nenhum pedido encontrado para o período selecionado.</p>`;
+                const filterText = document.getElementById('period-filter').options[document.getElementById('period-filter').selectedIndex].text;
+                container.innerHTML = `<p class="text-zinc-400 text-center py-12">Nenhum pedido encontrado para <strong>${filterText}</strong>.</p>`;
                 return;
             }
 
@@ -756,7 +768,7 @@
             renderProducts(products);
             updateCartCount();
 
-            // Carrega automaticamente o filtro "Dia" ao abrir o painel
+            // Garante que o filtro "Dia" já esteja ativo ao abrir o painel
             renderSales();
         };
     </script>
